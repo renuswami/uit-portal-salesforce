@@ -1,0 +1,26 @@
+.card-container {
+    background-color: white;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+}
+
+.custom-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.slds-text-color_success {
+    color: #027e46; /* Salesforce Success Green */
+    font-weight: bold;
+}
+
+.slds-text-color_error {
+    color: #c23934; /* Salesforce Error Red */
+    font-weight: bold;
+}
+
+.filter-section {
+    background-color: #f3f2f2;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}

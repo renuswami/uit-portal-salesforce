@@ -1,0 +1,156 @@
+/* === Modal Layout === */
+.custom-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+/* === Header === */
+.slds-modal__header {
+    border-bottom: 1px solid #ddd;
+    padding: 1rem;
+    background: #fff;
+}
+
+/* === Body === */
+.slds-modal__content {
+    overflow-y: auto;
+    max-height: 65vh;
+    background: #fff;
+}
+
+.r-padding{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+/* === Input Row === */
+.input-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding-left: 5%;
+}
+
+/* === Leave Section === */
+.leave-section {
+    margin-top: 1.2rem;
+}
+
+.leave-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+/* === Leave Cards === */
+.leave-card {
+    border: 1px solid #d8dde6;
+    border-radius: 10px;
+    padding: 1rem;
+    background: #fff;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+}
+
+.leave-card:hover {
+    border-color: #0176d3;
+    box-shadow: 0 0 6px rgba(1, 118, 211, 0.3);
+    transform: scale(1.02);
+}
+
+.selected-card {
+    border-color: #0176d3;
+    background-color: #eaf3ff;
+    box-shadow: 0 0 8px rgba(1, 118, 211, 0.5);
+}
+
+/* === Text inside cards === */
+.leave-title {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+}
+
+.leave-desc {
+    font-size: 0.8rem;
+    color: #555;
+}
+
+/* === Footer === */
+.custom-footer {
+    border-top: 1px solid #ddd;
+    background: #fff;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.footer-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* === Fade-in for dynamic elements (safe way) === */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === Responsive Design === */
+@media (max-width: 600px) {
+    .custom-container {
+        max-width: 95%;
+        min-height: 220px;
+    }
+
+    .input-row {
+        flex-direction: column;
+    }
+
+    .leave-card-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.error-text {
+    color: #ea001e;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    font-weight: 400;
+}
+
+/* === Enhanced Error Display === */
+.error-message {
+    background-color: #fdf2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    margin: 1rem 0;
+    color: #b91c1c;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.error-message-icon {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.error-message-text {
+    flex-grow: 1;
+}

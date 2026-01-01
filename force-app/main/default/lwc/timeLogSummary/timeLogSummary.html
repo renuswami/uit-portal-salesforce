@@ -1,0 +1,90 @@
+<template>
+    <lightning-card title="Employee Time Logs" icon-name="custom:custom25">
+        <div class="slds-p-around_medium">
+            <!-- Filter Section -->
+            <div class="slds-grid slds-gutters slds-wrap slds-m-bottom_medium filter-section">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                    <lightning-combobox
+                        name="periodType"
+                        label="Period Type"
+                        value={periodType}
+                        options={periodOptions}
+                        onchange={handlePeriodChange}>
+                    </lightning-combobox>
+                </div>
+                
+                <template if:true={isMonth}>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-input
+                            type="month"
+                            name="month"
+                            label="Select Month"
+                            value={selectedMonth}
+                            onchange={handleMonthChange}>
+                        </lightning-input>
+                    </div>
+                </template>
+                
+                <template if:false={isMonth}>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-combobox
+                            name="week"
+                            label="Select Week"
+                            value={selectedWeek}
+                            options={weekOptions}
+                            onchange={handleWeekChange}>
+                        </lightning-combobox>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="slds-is-relative slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Data Grid -->
+            <template if:false={isLoading}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <template for:each={summaries} for:item="summary">
+                        <div key={summary.employeeName} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-bottom_medium">
+                            <div class="slds-box slds-box_small card-container custom-card">
+                                <!-- Top Row: Billable and Non-Billable -->
+                                <div class="slds-grid slds-gutters slds-text-align_center slds-border_bottom slds-p-bottom_x-small">
+                                    <div class="slds-col slds-size_1-of-2 slds-border_right">
+                                        <div class="slds-text-heading_small slds-text-color_success">{summary.totalBillable}</div>
+                                        <div class="slds-text-body_small">Billable</div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <div class="slds-text-heading_small slds-text-color_error">{summary.totalNonBillable}</div>
+                                        <div class="slds-text-body_small">Non-Billable</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Second Row: Total Hours -->
+                                <div class="slds-text-align_center slds-p-vertical_x-small slds-border_bottom">
+                                    <div class="slds-text-heading_medium slds-text-title_bold">{summary.totalHours}</div>
+                                    <div class="slds-text-body_small">Total Hours</div>
+                                </div>
+                                
+                                <!-- Third Row: Employee Name -->
+                                <div class="slds-text-align_center slds-p-top_x-small">
+                                    <div class="slds-text-heading_small">{summary.employeeName}</div>
+                                    <div class="slds-text-body_small slds-text-color_weak">Employee</div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                <template if:false={summaries.length}>
+                    <div class="slds-text-align_center slds-m-top_medium">
+                        No time logs found for the selected period.
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

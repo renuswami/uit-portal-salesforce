@@ -1,0 +1,220 @@
+<template>
+    <div class="container fade-in">
+        <!-- Header -->
+        <div class="header-section">
+            <h1 class="header-title">
+                <lightning-icon icon-name="custom:custom19" size="small"></lightning-icon>
+                Regularization Management
+            </h1>
+            <p class="header-subtitle">Manage and review employee regularization requests</p>
+
+            <!-- Statistics Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">{totalRecords}</div>
+                    <div class="stat-label">
+                        <lightning-icon icon-name="utility:list" size="x-small"></lightning-icon>
+                        Total Requests
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{pendingCount}</div>
+                    <div class="stat-label">
+                        <lightning-icon icon-name="utility:clock" size="x-small"></lightning-icon>
+                        Pending Review
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{approvedCount}</div>
+                    <div class="stat-label">
+                        <lightning-icon icon-name="utility:check" size="x-small"></lightning-icon>
+                        Approved
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{rejectedCount}</div>
+                    <div class="stat-label">
+                        <lightning-icon icon-name="utility:close" size="x-small"></lightning-icon>
+                        Rejected
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section slide-in">
+            <div class="filter-title">
+                <lightning-icon icon-name="utility:filter" size="small"></lightning-icon>
+                Filters
+            </div>
+            <div class="filter-grid">
+                <div class="filter-item">
+                    <lightning-combobox name="employeeFilter" label="Employee" value={selectedEmployeeId}
+                        placeholder="Select employee..." options={employeeOptions} onchange={handleEmployeeChange}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="filter-item">
+                    <lightning-input type="date" label="Select Date" value={selectedDate} onchange={handleDateChange}>
+                    </lightning-input>
+                </div>
+
+                <div class="filter-item">
+                    <lightning-combobox name="monthFilter" label="Select Month" value={selectedMonth}
+                        placeholder="Select month..." options={monthOptions} onchange={handleMonthChange}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="filter-item">
+                    <lightning-combobox name="approvalFilter" label="Approval Status" value={selectedApprovalStatus}
+                        placeholder="Select status..." options={approvalStatusOptions} onchange={handleApprovalStatusChange}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="filter-item">
+                    <lightning-button label="Clear Filters" variant="neutral" class="clear-action-buttons"
+                        onclick={clearFilter}>
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="data-table-container">
+            <div class="header-container">
+                <div class="title-section">
+                    <lightning-icon icon-name="utility:table" size="small" class="title-icon"></lightning-icon>
+                    <span class="title">Regularization Requests</span>
+                </div>
+                <div class="action-buttons">
+                    <lightning-button 
+                        label="Approve Selected"
+                        variant="brand"
+                        onclick={handleBulkApprove}>
+                    </lightning-button>
+
+                    <lightning-button 
+                        label="Reject Selected"
+                        variant="destructive"
+                        onclick={handleBulkReject}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <template if:true={hasData}>
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped custom-regularization-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="select-col">
+                                <input type="checkbox" checked={isAllSelected} onchange={handleSelectAllChange}>
+                            </th>
+                            <th scope="col" data-field="Name" onclick={handleSort}>Name <template if:true={isSortByName}><span class="sort-arrow" data-dir={sortDirection}></span></template></th>
+                            <th scope="col" data-field="employeeName" onclick={handleSort}>Employee Name <template if:true={isSortByEmployeeName}><span class="sort-arrow" data-dir={sortDirection}></span></template></th>
+                            <th scope="col" data-field="firstCheckInRaw" onclick={handleSort}>First Checkin <template if:true={isSortByFirstCheckin}><span class="sort-arrow" data-dir={sortDirection}></span></template></th>
+                            <th scope="col" data-field="lastCheckOutRaw" onclick={handleSort}>Last Checkout <template if:true={isSortByLastCheckout}><span class="sort-arrow" data-dir={sortDirection}></span></template></th>
+                            <th scope="col" data-field="actualWorkHour" onclick={handleSort}>Actual work hour <template if:true={isSortByActualHour}><span class="sort-arrow" data-dir={sortDirection}></span></template></th>
+                            <th scope="col" data-field="Log_Hours__c" onclick={handleSort}>Log Hours <template if:true={isSortByLogHours}><span class="sort-arrow" data-dir={sortDirection}></span></template></th>
+                        <!-- <th scope="col" data-field="Approval_Status__c" onclick={handleSort}>Approval Status <template if:true={isSortByApprovalStatus}><span class="sort-arrow" data-dir={sortDirection}></span></template></th> -->
+                        <!-- <th scope="col" data-field="Status__c" onclick={handleSort}>Status <template if:true={isSortByStatus}><span class="sort-arrow" data-dir={sortDirection}></span></template></th> -->
+                            <th scope="col" class="action-column">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={data} for:item="reg">
+                            <tr key={reg.Id}>
+                                <td data-label="Select">
+                                    <input type="checkbox" data-id={reg.Id} checked={reg.isSelected} onchange={handleSelectRowChange}>
+                                </td>
+                                <td data-label="Name">{reg.Name}</td>
+                                <td data-label="Employee Name">{reg.employeeName}</td>
+                                <td data-label="First Checkin">{reg.firstCheckIn}</td>
+                                <td data-label="Last Checkout">{reg.lastCheckOut}</td>
+                                <td data-label="Actual work hour">{reg.actualWorkHour}</td>
+                                <td data-label="Log Hours">{reg.Log_Hours__c}</td>
+                              <!--  <td data-label="Approval Status">{reg.Approval_Status__c}</td> -->
+                               <!-- <td data-label="Status"><span class={reg.statusClass}>{reg.Status__c}</span></td> -->
+                                <td data-label="Action" class="action-column">
+                                    <a class="action-link" data-id={reg.Id} onclick={handleViewClick}>View</a>
+                                    <span class="action-separator">|</span>
+                                    <a class="action-link" data-id={reg.Id} onclick={handleApproveClick}>Approve</a>
+                                    <span class="action-separator">|</span>
+                                    <a class="action-link" data-id={reg.Id} onclick={handleRejectClick}>Reject</a>
+                                </td>
+                            </tr>
+                            <template if:true={reg.isExpanded}>
+                                <tr key={reg.expandedKey} class="expanded-row">
+                                    <td class="expanded-content" colspan="10">
+                                        <div class="time-logs-container">
+                                            <template if:true={reg.isLoadingLogs}>
+                                                <div class="slds-p-around_medium slds-text-align_center">
+                                                    <lightning-spinner alternative-text="Loading time logs..." size="small"></lightning-spinner>
+                                                </div>
+                                            </template>
+                                            <template if:false={reg.isLoadingLogs}>
+                                                <template if:true={reg.hasTimeLogs}>
+                                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer custom-timelog-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col" class="table-col_fixed-small">Date</th>
+                                                                <th scope="col">Project Task</th>
+                                                                <th scope="col">Description</th>
+                                                                <th scope="col" class="table-col_fixed-small">Billable hour</th>
+                                                                <th scope="col" class="table-col_fixed-small">Non Billable hour</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <template for:each={reg.timeLogs} for:item="log">
+                                                                <tr key={log.Id}>
+                                                                    <td data-label="Date">{log.formattedDate}</td>
+                                                                    <td data-label="Project Task">{log.taskName}</td>
+                                                                    <td data-label="Description">{log.Description__c}</td>
+                                                                    <td data-label="Billable hour">{log.billableHours}</td>
+                                                                    <td data-label="Non Billable hour">{log.nonBillableHours}</td>
+                                                                </tr>
+                                                            </template>
+                                                        </tbody>
+                                                    </table>
+                                                </template>
+                                                <template if:false={reg.hasTimeLogs}>
+                                                    <div class="slds-p-around_medium slds-text-align_center">No time logs found for this regularization.</div>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+
+            <template if:false={hasData}>
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <lightning-icon icon-name="utility:insert_tag_field" size="large"></lightning-icon>
+                    </div>
+                    <h3 class="empty-state-title">No Records Found</h3>
+                    <p class="empty-state-message">No regularization requests match your current filters.</p>
+                </div>
+            </template>
+        </div>
+        
+        <template if:true={showRejectModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Reject Regularization</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input name="rejectReason" type="text" label="Reason to Reject (Reason_to_Reject__c)" value={rejectReason} onchange={handleRejectReasonChange}></lightning-input>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeRejectModal}></lightning-button>
+                        <lightning-button variant="destructive" label="Reject" onclick={submitRejectReason}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" onclick={closeRejectModal}></div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,71 @@
+<template>
+    <lightning-card title="Regularization Request" class="custom-container">
+        <div class="input-row">
+            <lightning-input type="date" label="Select Date" value={selectedDate} onchange={handleDateChange}>
+            </lightning-input>
+
+            <lightning-combobox name="reason" label="Reason" value={selectedReason} placeholder="Select Reason"
+                options={reasonOptions} onchange={handleReasonChange}>
+            </lightning-combobox>
+        </div>
+
+        <template if:true={isLeaveReason}>
+            <c-leave-request-component record-id={recordId}  submit-button-control={submitButtonControl} onleavecreated={handleLeaveCreated} onshowtoast={handleToastEvent} class="leave-section"></c-leave-request-component>
+        </template>
+
+        <template if:true={isRegularizationReason}>
+            <div class="regularization-section fade-in">
+                <!-- Check-In -->
+                <div class="input-row">
+                    <lightning-input type="date" label="Date" value={selectedDate} disabled>
+                    </lightning-input>
+
+                    <lightning-input type="time" label="Check-In Time" value={checkIn}
+                        onchange={handleCheckInTimeChange} disabled={isTimeLocked}>
+                    </lightning-input>
+                </div>
+
+                <!-- Check-Out -->
+                <div class="input-row">
+                    <lightning-input type="date" label="Date" value={selectedDate} disabled>
+                    </lightning-input>
+
+                    <lightning-input type="time" label="Check-Out Time" value={checkOut}
+                        onchange={handleCheckOutTimeChange} disabled={isTimeLocked}>
+                    </lightning-input>
+                </div>
+
+                <div class="slds-m-top_small r-padding">
+                    <lightning-input label="Total Time (Hours)" value={totalTime} disabled></lightning-input>
+                </div>
+
+                <div class="slds-m-top_small r-padding">
+                    <lightning-textarea label="Description" value={description} onchange={handleDescriptionChange}>
+                    </lightning-textarea>
+                </div>
+            </div>
+        </template>
+
+         <template if:true={error}>
+                <div class="error-message" role="alert">
+                    <lightning-icon icon-name="utility:error" size="small" class="error-message-icon"></lightning-icon>
+                    <span class="error-message-text">{error}</span>
+                </div>
+            </template>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="slds-spinner_container">
+                    <div class="slds-spinner slds-spinner_medium" role="status">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </template>
+
+        <div class="custom-footer">
+            <lightning-button variant="brand" label="Submit" onclick={handleSubmit}></lightning-button>
+        </div>
+    </lightning-card>
+</template>
