@@ -1,9 +1,10 @@
 public with sharing class TimeLogSummaryController {
     @AuraEnabled(cacheable=true)
-    public static List<TimeLogSummaryWrapper> getTimeLogSummaries(Date startDate, Date endDate) {
-        List<TimeLogSummaryWrapper> summaries = new List<TimeLogSummaryWrapper>();
+    public static List<TimeLogSummaryWrapper> getTimeLogSummaries(Date startDate, Date endDate, String cacheBuster) {
+        Map<Id, TimeLogSummaryWrapper> summaryMap = new Map<Id, TimeLogSummaryWrapper>();
         
         try {
+            // 1. Get All Logs (Grouped by Employee)
             for (AggregateResult ar : [
                 SELECT CreatedById, CreatedBy.Name empName, 
                        SUM(Hours__c) totalBillable, 
@@ -13,17 +14,35 @@ public with sharing class TimeLogSummaryController {
                 GROUP BY CreatedById, CreatedBy.Name
                 ORDER BY CreatedBy.Name
             ]) {
-                summaries.add(new TimeLogSummaryWrapper(
+                Id empId = (Id)ar.get('CreatedById');
+                summaryMap.put(empId, new TimeLogSummaryWrapper(
                     (String)ar.get('empName'),
                     (Decimal)ar.get('totalBillable'),
-                    (Decimal)ar.get('totalNonBillable')
+                    (Decimal)ar.get('totalNonBillable'),
+                    0 // Initialize approved hours to 0
                 ));
             }
+
+            // 2. Get Approved Logs Only using Approved_Logged_Hours__c
+            for (AggregateResult ar : [
+                SELECT CreatedById, 
+                       SUM(Approved_Logged_Hours__c) totalApproved
+                FROM Time_Log__c
+                WHERE Date__c >= :startDate AND Date__c <= :endDate
+                GROUP BY CreatedById
+            ]) {
+                Id empId = (Id)ar.get('CreatedById');
+                if (summaryMap.containsKey(empId)) {
+                    Decimal approvedHours = (Decimal)ar.get('totalApproved');
+                    summaryMap.get(empId).totalApprovedHours = approvedHours != null ? approvedHours : 0;
+                }
+            }
+
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
         
-        return summaries;
+        return summaryMap.values();
     }
     
     public class TimeLogSummaryWrapper {
@@ -31,12 +50,14 @@ public with sharing class TimeLogSummaryController {
         @AuraEnabled public Decimal totalBillable;
         @AuraEnabled public Decimal totalNonBillable;
         @AuraEnabled public Decimal totalHours;
+        @AuraEnabled public Decimal totalApprovedHours;
         
-        public TimeLogSummaryWrapper(String name, Decimal billable, Decimal nonBillable) {
+        public TimeLogSummaryWrapper(String name, Decimal billable, Decimal nonBillable, Decimal approvedHours) {
             this.employeeName = name;
             this.totalBillable = billable != null ? billable : 0;
             this.totalNonBillable = nonBillable != null ? nonBillable : 0;
             this.totalHours = this.totalBillable + this.totalNonBillable;
+            this.totalApprovedHours = approvedHours != null ? approvedHours : 0;
         }
     }
 }

@@ -1,14 +1,18 @@
+/* Card Container Styles */
 .card-container {
     background-color: white;
     transition: all 0.3s ease;
     border-radius: 0.5rem;
+    border: 1px solid #dddbda;
 }
 
 .custom-card:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     transform: translateY(-2px);
+    border-color: #b0adab;
 }
 
+/* Text Colors */
 .slds-text-color_success {
     color: #027e46; /* Salesforce Success Green */
     font-weight: bold;
@@ -19,8 +23,26 @@
     font-weight: bold;
 }
 
+/* Filter Section Styles */
 .filter-section {
-    background-color: #f3f2f2;
+    background-color: #f8f9fa;
     padding: 1rem;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid #dddbda;
+}
+
+/* Responsive Toggle Alignment */
+@media (min-width: 768px) {
+    .toggle-container {
+        padding-top: 1.25rem; /* Aligns with labels of other inputs */
+        display: flex;
+        justify-content: flex-end; /* Right align on desktop */
+    }
+}
+
+@media (max-width: 767px) {
+    .toggle-container {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
 }

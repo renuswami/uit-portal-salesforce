@@ -3,27 +3,49 @@ import getTimeLogSummaries from '@salesforce/apex/TimeLogSummaryController.getTi
 
 export default class TimeLogSummary extends LightningElement {
     @track summaries = [];
-    @track periodType = 'Month'; // Month or Week
     @track selectedMonth = ''; // YYYY-MM
-    @track selectedWeek = 'This Week'; // This Week, Last Week
+    @track selectedWeek = ''; // This Week, Last Week
     @track isLoading = true;
+    @track logFilter = 'All'; // All, Logged Hours, Approved Logged Hours
+    
+    // Explicit Start/End dates visible in the UI
+    @track startDate = '';
+    @track endDate = '';
+    @track cacheBuster = Math.random();
 
-    startDate;
-    endDate;
-
-    periodOptions = [
-        { label: 'Month', value: 'Month' },
-        { label: 'Week', value: 'Week' }
-    ];
+    monthOptions = [];
 
     weekOptions = [
         { label: 'This Week', value: 'This Week' },
         { label: 'Last Week', value: 'Last Week' }
     ];
 
+    filterOptions = [
+        { label: 'All', value: 'All' },
+        { label: 'Logged Hours', value: 'Logged Hours' },
+        { label: 'Approved Logged Hours', value: 'Approved Logged Hours' }
+    ];
+
     connectedCallback() {
+        this.generateMonthOptions();
         this.setDefaultMonth();
-        this.calculateDateRange();
+    }
+
+    generateMonthOptions() {
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        
+        this.monthOptions = months.map((name, index) => {
+            const monthNum = String(index + 1).padStart(2, '0');
+            return {
+                label: `${name} ${currentYear}`,
+                value: `${currentYear}-${monthNum}`
+            };
+        });
     }
 
     setDefaultMonth() {
@@ -31,62 +53,73 @@ export default class TimeLogSummary extends LightningElement {
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         this.selectedMonth = `${year}-${month}`;
-    }
-
-    handlePeriodChange(event) {
-        this.periodType = event.detail.value;
-        this.calculateDateRange();
+        this.updateDatesFromMonth();
     }
 
     handleMonthChange(event) {
-        this.selectedMonth = event.target.value;
-        this.calculateDateRange();
+        this.selectedMonth = event.detail.value;
+        this.selectedWeek = ''; // Clear week selection
+        this.updateDatesFromMonth();
     }
 
     handleWeekChange(event) {
         this.selectedWeek = event.detail.value;
-        this.calculateDateRange();
+        this.selectedMonth = ''; // Clear month selection
+        this.updateDatesFromWeek();
     }
 
-    calculateDateRange() {
-        if (this.periodType === 'Month') {
-            if (this.selectedMonth) {
-                const [year, month] = this.selectedMonth.split('-');
-                // Create date object (Month is 0-indexed in JS Date)
-                const date = new Date(parseInt(year), parseInt(month) - 1, 1);
-                
-                // First day of month
-                // Handle timezone offset issues by using local date string construction or careful manipulation
-                // Simple approach: setDate(1) and setMonth/Year
-                
-                const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-                const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-                
-                // Adjust for timezone to ensure we send YYYY-MM-DD correctly
-                this.startDate = this.formatDate(firstDay);
-                this.endDate = this.formatDate(lastDay);
-            }
-        } else {
-            const today = new Date();
-            const currentDay = today.getDay(); // 0 is Sunday
-            // Assume Monday is start of week
-            const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay;
-            const thisMonday = new Date(today);
-            thisMonday.setDate(today.getDate() + distanceToMonday);
+    handleStartDateChange(event) {
+        this.startDate = event.target.value;
+        this.clearDropdowns();
+    }
+
+    handleEndDateChange(event) {
+        this.endDate = event.target.value;
+        this.clearDropdowns();
+    }
+
+    clearDropdowns() {
+        this.selectedMonth = '';
+        this.selectedWeek = '';
+    }
+
+    handleFilterChange(event) {
+        this.logFilter = event.detail.value;
+    }
+
+    updateDatesFromMonth() {
+        if (this.selectedMonth) {
+            const [year, month] = this.selectedMonth.split('-');
+            const date = new Date(parseInt(year), parseInt(month) - 1, 1);
             
-            if (this.selectedWeek === 'This Week') {
-                this.startDate = this.formatDate(thisMonday);
-                const thisSunday = new Date(thisMonday);
-                thisSunday.setDate(thisMonday.getDate() + 6);
-                this.endDate = this.formatDate(thisSunday);
-            } else {
-                const lastMonday = new Date(thisMonday);
-                lastMonday.setDate(thisMonday.getDate() - 7);
-                this.startDate = this.formatDate(lastMonday);
-                const lastSunday = new Date(lastMonday);
-                lastSunday.setDate(lastMonday.getDate() + 6);
-                this.endDate = this.formatDate(lastSunday);
-            }
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            
+            this.startDate = this.formatDate(firstDay);
+            this.endDate = this.formatDate(lastDay);
+        }
+    }
+
+    updateDatesFromWeek() {
+        const today = new Date();
+        const currentDay = today.getDay(); // 0 is Sunday
+        // Assume Monday is start of week
+        const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay;
+        const thisMonday = new Date(today);
+        thisMonday.setDate(today.getDate() + distanceToMonday);
+        
+        if (this.selectedWeek === 'This Week') {
+            this.startDate = this.formatDate(thisMonday);
+            const thisSunday = new Date(thisMonday);
+            thisSunday.setDate(thisMonday.getDate() + 6);
+            this.endDate = this.formatDate(thisSunday);
+        } else if (this.selectedWeek === 'Last Week') {
+            const lastMonday = new Date(thisMonday);
+            lastMonday.setDate(thisMonday.getDate() - 7);
+            this.startDate = this.formatDate(lastMonday);
+            const lastSunday = new Date(lastMonday);
+            lastSunday.setDate(lastMonday.getDate() + 6);
+            this.endDate = this.formatDate(lastSunday);
         }
     }
     
@@ -97,11 +130,14 @@ export default class TimeLogSummary extends LightningElement {
         return `${year}-${month}-${day}`;
     }
 
-    @wire(getTimeLogSummaries, { startDate: '$startDate', endDate: '$endDate' })
+    @wire(getTimeLogSummaries, { startDate: '$startDate', endDate: '$endDate', cacheBuster: '$cacheBuster' })
     wiredSummaries({ error, data }) {
-        this.isLoading = true; // Set loading true when wire triggers (optional, might flicker)
+        this.isLoading = true;
         if (data) {
-            this.summaries = data;
+            this.summaries = data.map(s => ({
+                ...s,
+                totalApprovedHours: s.totalApprovedHours !== undefined ? s.totalApprovedHours : 0
+            }));
             this.isLoading = false;
         } else if (error) {
             console.error('Error fetching summaries:', error);
@@ -110,7 +146,19 @@ export default class TimeLogSummary extends LightningElement {
         }
     }
     
-    get isMonth() {
-        return this.periodType === 'Month';
+    get showBillableBreakdown() {
+        return this.logFilter === 'All' || this.logFilter === 'Logged Hours';
+    }
+
+    get showTotalHours() {
+        return this.logFilter === 'All' || this.logFilter === 'Logged Hours' || this.logFilter === 'Approved Logged Hours';
+    }
+
+    get showApprovedRow() {
+        return this.logFilter === 'All';
+    }
+    
+    get isApprovedFilter() {
+        return this.logFilter === 'Approved Logged Hours';
     }
 }

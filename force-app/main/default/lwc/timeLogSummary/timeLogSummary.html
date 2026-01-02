@@ -2,40 +2,66 @@
     <lightning-card title="Employee Time Logs" icon-name="custom:custom25">
         <div class="slds-p-around_medium">
             <!-- Filter Section -->
-            <div class="slds-grid slds-gutters slds-wrap slds-m-bottom_medium filter-section">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+            <div class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-center slds-m-bottom_medium filter-section">
+                <!-- 1. Month Filter -->
+                <div class="slds-col  slds-small-size_1-of-2 slds-medium-size_2-of-12 slds-m-bottom_small">
                     <lightning-combobox
-                        name="periodType"
-                        label="Period Type"
-                        value={periodType}
-                        options={periodOptions}
-                        onchange={handlePeriodChange}>
+                        name="month"
+                        label="Month"
+                        value={selectedMonth}
+                        options={monthOptions}
+                        onchange={handleMonthChange}
+                        placeholder="Select Month"
+                        class="filter-dropdown">
+                    </lightning-combobox>
+                </div>
+
+                <!-- 2. Date Range -->
+                <div class="slds-col  slds-small-size_1-of-4 slds-medium-size_2-of-12 slds-m-bottom_small">
+                    <lightning-input
+                        type="date"
+                        name="startDate"
+                        label="Start Date"
+                        value={startDate}
+                        onchange={handleStartDateChange}
+                        class="date-input">
+                    </lightning-input>
+                </div>
+                <div class="slds-col  slds-medium-size_2-of-12 slds-m-bottom_small">
+                    <lightning-input
+                        type="date"
+                        name="endDate"
+                        label="End Date"
+                        value={endDate}
+                        onchange={handleEndDateChange}
+                        class="date-input">
+                    </lightning-input>
+                </div>
+
+                <!-- 3. Week Filter -->
+                <div class="slds-col  slds-small-size_1-of-2 slds-medium-size_2-of-12 slds-m-bottom_small">
+                    <lightning-combobox
+                        name="week"
+                        label="Week"
+                        value={selectedWeek}
+                        options={weekOptions}
+                        onchange={handleWeekChange}
+                        placeholder="Select Week"
+                        class="filter-dropdown">
                     </lightning-combobox>
                 </div>
                 
-                <template if:true={isMonth}>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
-                        <lightning-input
-                            type="month"
-                            name="month"
-                            label="Select Month"
-                            value={selectedMonth}
-                            onchange={handleMonthChange}>
-                        </lightning-input>
-                    </div>
-                </template>
-                
-                <template if:false={isMonth}>
-                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
-                        <lightning-combobox
-                            name="week"
-                            label="Select Week"
-                            value={selectedWeek}
-                            options={weekOptions}
-                            onchange={handleWeekChange}>
-                        </lightning-combobox>
-                    </div>
-                </template>
+                <!-- 4. Filter Type Dropdown -->
+                <div class="slds-col slds-size_1-of-1 slds-small-size_1-of-1 slds-medium-size_2-of-12 slds-m-bottom_small">
+                    <lightning-combobox
+                        name="logFilter"
+                        label="Log Type"
+                        value={logFilter}
+                        options={filterOptions}
+                        onchange={handleFilterChange}
+                        class="filter-dropdown">
+                    </lightning-combobox>
+                </div>
             </div>
 
             <!-- Loading Spinner -->
@@ -51,28 +77,46 @@
                     <template for:each={summaries} for:item="summary">
                         <div key={summary.employeeName} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-bottom_medium">
                             <div class="slds-box slds-box_small card-container custom-card">
-                                <!-- Top Row: Billable and Non-Billable -->
-                                <div class="slds-grid slds-gutters slds-text-align_center slds-border_bottom slds-p-bottom_x-small">
-                                    <div class="slds-col slds-size_1-of-2 slds-border_right">
-                                        <div class="slds-text-heading_small slds-text-color_success">{summary.totalBillable}</div>
-                                        <div class="slds-text-body_small">Billable</div>
+                                <!-- Row 1: Billable Breakdown (Visible for All or Logged Hours) -->
+                                <template if:true={showBillableBreakdown}>
+                                    <div class="slds-grid slds-gutters slds-text-align_center slds-border_bottom slds-p-bottom_x-small">
+                                        <div class="slds-col slds-size_1-of-2 slds-border_right">
+                                            <div class="slds-text-heading_small slds-text-color_success">{summary.totalBillable}</div>
+                                            <div class="slds-text-body_small">Billable</div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <div class="slds-text-heading_small slds-text-color_error">{summary.totalNonBillable}</div>
+                                            <div class="slds-text-body_small">Non-Billable</div>
+                                        </div>
                                     </div>
-                                    <div class="slds-col slds-size_1-of-2">
-                                        <div class="slds-text-heading_small slds-text-color_error">{summary.totalNonBillable}</div>
-                                        <div class="slds-text-body_small">Non-Billable</div>
+                                </template>
+
+                                <!-- Row 1 (Approved Filter) or Row 2 (Others): Total Hours -->
+                                <template if:true={showTotalHours}>
+                                    <div class="slds-text-align_center slds-p-vertical_x-small slds-border_bottom">
+                                        <!-- For Approved Filter, show totalApprovedHours. For others, show totalHours -->
+                                        <template if:true={isApprovedFilter}>
+                                            <div class="slds-text-heading_medium slds-text-title_bold">{summary.totalApprovedHours}</div>
+                                            <div class="slds-text-body_small">Total Approved Hours</div>
+                                        </template>
+                                        <template if:false={isApprovedFilter}>
+                                            <div class="slds-text-heading_medium slds-text-title_bold">{summary.totalHours}</div>
+                                            <div class="slds-text-body_small">Total Hours</div>
+                                        </template>
                                     </div>
-                                </div>
+                                </template>
                                 
-                                <!-- Second Row: Total Hours -->
-                                <div class="slds-text-align_center slds-p-vertical_x-small slds-border_bottom">
-                                    <div class="slds-text-heading_medium slds-text-title_bold">{summary.totalHours}</div>
-                                    <div class="slds-text-body_small">Total Hours</div>
-                                </div>
-                                
-                                <!-- Third Row: Employee Name -->
+                                <!-- Row 3: Approved Logged Hours (Visible Only for All Filter) -->
+                                <template if:true={showApprovedRow}>
+                                    <div class="slds-text-align_center slds-p-vertical_x-small slds-border_bottom">
+                                        <div class="slds-text-heading_small">{summary.totalApprovedHours}</div>
+                                        <div class="slds-text-body_small">Approved Logged Hours</div>
+                                    </div>
+                                </template>
+
+                                <!-- Last Row: Employee Name -->
                                 <div class="slds-text-align_center slds-p-top_x-small">
                                     <div class="slds-text-heading_small">{summary.employeeName}</div>
-                                    <div class="slds-text-body_small slds-text-color_weak">Employee</div>
                                 </div>
                             </div>
                         </div>
