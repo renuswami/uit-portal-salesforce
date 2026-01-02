@@ -1,0 +1,62 @@
+.project-row,
+.task-row,
+.subtask-row {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 0.25rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.project-row:hover,
+.task-row:hover,
+.subtask-row:hover {
+    background-color: #f3f9ff; /* Very light blue */
+}
+
+.project-row {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #080707;
+    background-color: #ffffff;
+}
+
+.task-row {
+    color: #3e3e3c;
+    border-left: 3px solid transparent;
+}
+
+.task-row:hover {
+    border-left-color: #0176d3;
+}
+
+.subtask-row {
+    color: #3e3e3c;
+    border-left: 3px solid transparent;
+}
+
+.subtask-row:hover {
+    border-left-color: #0176d3;
+}
+
+/* Ensure icons are aligned */
+.slds-tree__item {
+    display: flex;
+    align-items: center;
+}
+
+/* Modal sizing */
+.slds-modal__container {
+    max-width: 60rem;
+    width: 70%;
+}
+
+/* Custom Avatar Style */
+.custom-avatar {
+    background-color: #0176d3;
+}
+
+.custom-avatar .slds-avatar__initials {
+    color: white;
+}

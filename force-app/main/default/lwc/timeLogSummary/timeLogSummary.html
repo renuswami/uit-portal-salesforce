@@ -2,9 +2,9 @@
     <lightning-card title="Employee Time Logs" icon-name="custom:custom25">
         <div class="slds-p-around_medium">
             <!-- Filter Section -->
-            <div class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-center slds-m-bottom_medium filter-section">
+            <div class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-end slds-m-bottom_medium filter-section">
                 <!-- 1. Month Filter -->
-                <div class="slds-col  slds-small-size_1-of-2 slds-medium-size_2-of-12 slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 filter-item slds-m-bottom_small">
                     <lightning-combobox
                         name="month"
                         label="Month"
@@ -16,8 +16,8 @@
                     </lightning-combobox>
                 </div>
 
-                <!-- 2. Date Range -->
-                <div class="slds-col  slds-small-size_1-of-4 slds-medium-size_2-of-12 slds-m-bottom_small">
+                <!-- 2. Start Date -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 filter-item slds-m-bottom_small">
                     <lightning-input
                         type="date"
                         name="startDate"
@@ -27,7 +27,9 @@
                         class="date-input">
                     </lightning-input>
                 </div>
-                <div class="slds-col  slds-medium-size_2-of-12 slds-m-bottom_small">
+
+                <!-- 3. End Date -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 filter-item slds-m-bottom_small">
                     <lightning-input
                         type="date"
                         name="endDate"
@@ -38,8 +40,8 @@
                     </lightning-input>
                 </div>
 
-                <!-- 3. Week Filter -->
-                <div class="slds-col  slds-small-size_1-of-2 slds-medium-size_2-of-12 slds-m-bottom_small">
+                <!-- 4. Week Filter -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 filter-item slds-m-bottom_small">
                     <lightning-combobox
                         name="week"
                         label="Week"
@@ -51,8 +53,8 @@
                     </lightning-combobox>
                 </div>
                 
-                <!-- 4. Filter Type Dropdown -->
-                <div class="slds-col slds-size_1-of-1 slds-small-size_1-of-1 slds-medium-size_2-of-12 slds-m-bottom_small">
+                <!-- 5. Log Type Filter -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 filter-item slds-m-bottom_small">
                     <lightning-combobox
                         name="logFilter"
                         label="Log Type"
@@ -91,13 +93,27 @@
                                     </div>
                                 </template>
 
-                                <!-- Row 1 (Approved Filter) or Row 2 (Others): Total Hours -->
+                                <!-- Row 2: Side-by-Side View for "All" Filter -->
+                                <template if:true={isAllFilter}>
+                                    <div class="slds-grid slds-gutters slds-text-align_center slds-p-vertical_x-small slds-border_bottom">
+                                        <div class="slds-col slds-size_1-of-2 slds-border_right">
+                                            <div class="slds-text-heading_medium slds-text-title_bold">{summary.totalHours}</div>
+                                            <div class="slds-text-body_small">Total Hours</div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <div class="slds-text-heading_medium slds-text-color_success slds-text-title_bold">{summary.totalApprovedHours}</div>
+                                            <div class="slds-text-body_small">Approved Logged Hours</div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- Row 2 (Others): Single Column Total Hours -->
                                 <template if:true={showTotalHours}>
                                     <div class="slds-text-align_center slds-p-vertical_x-small slds-border_bottom">
-                                        <!-- For Approved Filter, show totalApprovedHours. For others, show totalHours -->
+                                        <!-- For Approved Filter, show totalApprovedHours. For others (Logged Hours), show totalHours -->
                                         <template if:true={isApprovedFilter}>
-                                            <div class="slds-text-heading_medium slds-text-title_bold">{summary.totalApprovedHours}</div>
-                                            <div class="slds-text-body_small">Total Approved Hours</div>
+                                            <div class="slds-text-heading_medium slds-text-color_success slds-text-title_bold">{summary.totalApprovedHours}</div>
+                                            <div class="slds-text-body_small">Approved Logged Hours</div>
                                         </template>
                                         <template if:false={isApprovedFilter}>
                                             <div class="slds-text-heading_medium slds-text-title_bold">{summary.totalHours}</div>
@@ -114,9 +130,12 @@
                                     </div>
                                 </template>
 
-                                <!-- Last Row: Employee Name -->
+                                <!-- Last Row: Employee Name and Report View Action -->
                                 <div class="slds-text-align_center slds-p-top_x-small">
-                                    <div class="slds-text-heading_small">{summary.employeeName}</div>
+                                    <div class="slds-text-heading_small">
+                                        {summary.employeeName}
+                                        <a href="#" class="slds-m-left_small action-link" data-name={summary.employeeName} onclick={handleReportView}>Report View</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

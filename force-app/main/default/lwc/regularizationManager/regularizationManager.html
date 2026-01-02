@@ -130,9 +130,7 @@
                                 <td data-label="First Checkin">{reg.firstCheckIn}</td>
                                 <td data-label="Last Checkout">{reg.lastCheckOut}</td>
                                 <td data-label="Actual work hour">{reg.actualWorkHour}</td>
-                                <td data-label="Log Hours">{reg.Log_Hours__c}</td>
-                              <!--  <td data-label="Approval Status">{reg.Approval_Status__c}</td> -->
-                               <!-- <td data-label="Status"><span class={reg.statusClass}>{reg.Status__c}</span></td> -->
+                                <td data-label="Log Hours">{reg.formattedLogHours}</td>
                                 <td data-label="Action" class="action-column">
                                     <a class="action-link" data-id={reg.Id} onclick={handleViewClick}>View</a>
                                     <span class="action-separator">|</span>

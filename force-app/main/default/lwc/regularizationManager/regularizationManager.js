@@ -79,7 +79,7 @@ export default class RegularizationManager extends LightningElement {
     }
 
     processRegularizations(data) {
-        this.regularizations = data.map(record => {
+        this.regularizations = data.map((record, index) => {
             const createdByRelName = record.CreatedBy && record.CreatedBy.Name ? record.CreatedBy.Name : null;
             const createdByFlatName = record.CreatedByName ? record.CreatedByName : null;
             const employeeRelName = record.Employee__r && record.Employee__r.Name ? record.Employee__r.Name : null;
@@ -88,12 +88,21 @@ export default class RegularizationManager extends LightningElement {
             const employeeName = createdByRelName || createdByFlatName || employeeRelName || fallbackFromId;
             const firstCheckIn = record.AttendanceId__r && record.AttendanceId__r.First_Check_In__c ? record.AttendanceId__r.First_Check_In__c : null;
             const lastCheckOut = record.AttendanceId__r && record.AttendanceId__r.Last_Check_Out__c ? record.AttendanceId__r.Last_Check_Out__c : null;
-            console.log('check in '+ firstCheckIn);
-            console.log('check out '+lastCheckOut);
+            
+            // Enhanced Debugging for Log_Hours__c
+            if (index === 0) {
+                console.log('=== DEBUG START ===');
+                console.log('Record Keys:', Object.keys(record));
+                console.log('Log_Hours__c Value:', record.Log_Hours__c);
+                console.log('Log_Hours__c Type:', typeof record.Log_Hours__c);
+                console.log('=== DEBUG END ===');
+            }
+
             return {
                 ...record,
                 employeeName,
-                Total_Hours1__c: record.Total_Hours1__c,
+                Total_Hours1__c: this.formatHours(record.Total_Hours1__c),
+                formattedLogHours: this.formatHours(record.Log_Hours__c),
                 Log_Hours__c: record.Log_Hours__c,
                 statusClass: this.getStatusClass(record.Status__c),
                 firstCheckIn: this.formatDateTime(firstCheckIn),
@@ -470,9 +479,9 @@ export default class RegularizationManager extends LightningElement {
     }
 
     formatHours(val) {
-        if (val === null || val === undefined || val === '') return '';
+        if (val === null || val === undefined || val === '') return '0.00';
         const num = Number(val);
-        if (Number.isNaN(num)) return String(val);
+        if (Number.isNaN(num)) return String(val); // Fallback for strings/time
         return num.toFixed(2);
     }
 }

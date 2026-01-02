@@ -1,7 +1,10 @@
 import { LightningElement, track, wire } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getTimeLogSummaries from '@salesforce/apex/TimeLogSummaryController.getTimeLogSummaries';
+import getEmployeeReportId from '@salesforce/apex/TimeLogSummaryController.getEmployeeReportId';
 
-export default class TimeLogSummary extends LightningElement {
+export default class TimeLogSummary extends NavigationMixin(LightningElement) {
     @track summaries = [];
     @track selectedMonth = ''; // YYYY-MM
     @track selectedWeek = ''; // This Week, Last Week
@@ -151,14 +154,56 @@ export default class TimeLogSummary extends LightningElement {
     }
 
     get showTotalHours() {
-        return this.logFilter === 'All' || this.logFilter === 'Logged Hours' || this.logFilter === 'Approved Logged Hours';
+        // When 'All', we don't use this single-column view anymore, we use the side-by-side view
+        return this.logFilter !== 'All';
     }
 
-    get showApprovedRow() {
+    get showApprovedHours() {
+        // This was used for the single row view in Approved filter, keeping it consistent
+        return this.logFilter === 'Approved Logged Hours';
+    }
+
+    get isAllFilter() {
         return this.logFilter === 'All';
     }
-    
+
     get isApprovedFilter() {
         return this.logFilter === 'Approved Logged Hours';
+    }
+
+    handleReportView(event) {
+        event.preventDefault();
+        const employeeName = event.target.dataset.name;
+        
+        getEmployeeReportId({ employeeName: employeeName })
+            .then(reportId => {
+                if (reportId) {
+                    this[NavigationMixin.Navigate]({
+                        type: 'standard__recordPage',
+                        attributes: {
+                            recordId: reportId,
+                            objectApiName: 'Report',
+                            actionName: 'view'
+                        }
+                    });
+                } else {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Report Not Found',
+                            message: 'No allocation report found for ' + employeeName,
+                            variant: 'warning'
+                        })
+                    );
+                }
+            })
+            .catch(error => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error',
+                        message: 'Error fetching report: ' + (error.body ? error.body.message : error.message),
+                        variant: 'error'
+                    })
+                );
+            });
     }
 }

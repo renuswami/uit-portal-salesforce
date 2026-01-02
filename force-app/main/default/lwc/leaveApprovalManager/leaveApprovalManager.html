@@ -1,0 +1,133 @@
+<template>
+    <div class="slds-card slds-p-around_medium">
+        <!-- Header -->
+        <div class="slds-page-header slds-mb-medium">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="standard:approval" size="medium"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate" title="Leave Approval Manager">Leave Approval Manager</span>
+                                    </h1>
+                                </div>
+                            </div>
+                            <p class="slds-page-header__name-meta">Manage pending leave requests</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__control">
+                        <div class="slds-button-group" role="group">
+                            <lightning-button label="Approve Selected" variant="brand" onclick={handleBulkApprove} class="slds-m-right_x-small"></lightning-button>
+                            <lightning-button label="Reject Selected" variant="destructive" onclick={handleBulkReject}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div if:true={isLoading} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+
+        <!-- Data Table -->
+        <template if:true={hasLeaves}>
+            <div class="slds-scrollable_x">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col" style="width: 3rem;">
+                                <div class="slds-truncate" title="Select All">
+                                    <lightning-input type="checkbox" checked={isAllSelected} onchange={handleSelectAll} variant="label-hidden"></lightning-input>
+                                </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Employee Name">Employee Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Start Date">Start Date</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="End Date">End Date</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Day Type">Day Type</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Leave Type">Leave Type</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total Days">Total Days</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Description">Description</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Action">Action</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={leaves} for:item="leave">
+                            <tr key={leave.Id} class="slds-hint-parent">
+                                <td class="slds-text-align_right" role="gridcell">
+                                    <lightning-input type="checkbox" checked={leave.isSelected} data-id={leave.Id} onchange={handleSelectRow} variant="label-hidden"></lightning-input>
+                                </td>
+                                <td data-label="Employee Name">
+                                    <div class="slds-truncate" title={leave.EmployeeName}>{leave.EmployeeName}</div>
+                                </td>
+                                <td data-label="Start Date">
+                                    <div class="slds-truncate" title={leave.Start_Date__c}>
+                                        <lightning-formatted-date-time value={leave.Start_Date__c}></lightning-formatted-date-time>
+                                    </div>
+                                </td>
+                                <td data-label="End Date">
+                                    <div class="slds-truncate" title={leave.End_Date__c}>
+                                        <lightning-formatted-date-time value={leave.End_Date__c}></lightning-formatted-date-time>
+                                    </div>
+                                </td>
+                                <td data-label="Day Type">
+                                    <div class="slds-truncate" title={leave.Day_Type__c}>{leave.Day_Type__c}</div>
+                                </td>
+                                <td data-label="Leave Type">
+                                    <div class="slds-truncate" title={leave.Leave_Type__c}>
+                                        <span class="slds-badge">{leave.Leave_Type__c}</span>
+                                    </div>
+                                </td>
+                                <td data-label="Total Days">
+                                    <div class="slds-truncate" title={leave.Total_Days__c}>{leave.Total_Days__c}</div>
+                                </td>
+                                <td data-label="Description">
+                                    <div class="slds-truncate" title={leave.Description__c}>{leave.Description__c}</div>
+                                </td>
+                                <td data-label="Action">
+                                    <div class="slds-truncate" title="Action">
+                                        <a href="#" data-id={leave.Id} onclick={handleApprove} class="action-link slds-m-right_small">Approve</a>
+                                        <span class="slds-text-color_weak">|</span>
+                                        <a href="#" data-id={leave.Id} onclick={handleReject} class="action-link slds-m-left_small">Reject</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <!-- Empty State -->
+        <template if:false={hasLeaves}>
+            <div class="slds-illustration slds-illustration_small slds-p-around_large">
+                <div class="slds-text-longform">
+                    <h3 class="slds-text-heading_medium">No Pending Requests</h3>
+                    <p class="slds-text-body_regular">There are no leave requests pending approval at this time.</p>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

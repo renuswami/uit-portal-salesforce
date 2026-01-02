@@ -17,6 +17,7 @@ public with sharing class TimeLogSummaryController {
                 Id empId = (Id)ar.get('CreatedById');
                 summaryMap.put(empId, new TimeLogSummaryWrapper(
                     (String)ar.get('empName'),
+                    (Id)ar.get('CreatedById'),
                     (Decimal)ar.get('totalBillable'),
                     (Decimal)ar.get('totalNonBillable'),
                     0 // Initialize approved hours to 0
@@ -44,16 +45,32 @@ public with sharing class TimeLogSummaryController {
         
         return summaryMap.values();
     }
+
+    @AuraEnabled(cacheable=true)
+    public static String getEmployeeReportId(String employeeName) {
+        try {
+            String searchPattern = '%' + employeeName + '%Allocation report%';
+            List<Report> reports = [SELECT Id FROM Report WHERE Name LIKE :searchPattern LIMIT 1];
+            if (!reports.isEmpty()) {
+                return reports[0].Id;
+            }
+            return null;
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
     
     public class TimeLogSummaryWrapper {
         @AuraEnabled public String employeeName;
+        @AuraEnabled public String employeeId;
         @AuraEnabled public Decimal totalBillable;
         @AuraEnabled public Decimal totalNonBillable;
         @AuraEnabled public Decimal totalHours;
         @AuraEnabled public Decimal totalApprovedHours;
         
-        public TimeLogSummaryWrapper(String name, Decimal billable, Decimal nonBillable, Decimal approvedHours) {
+        public TimeLogSummaryWrapper(String name, String empId, Decimal billable, Decimal nonBillable, Decimal approvedHours) {
             this.employeeName = name;
+            this.employeeId = empId;
             this.totalBillable = billable != null ? billable : 0;
             this.totalNonBillable = nonBillable != null ? nonBillable : 0;
             this.totalHours = this.totalBillable + this.totalNonBillable;

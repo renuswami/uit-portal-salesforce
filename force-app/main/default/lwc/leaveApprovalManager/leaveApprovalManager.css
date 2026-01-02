@@ -1,0 +1,24 @@
+.slds-table th {
+    background-color: #f3f2f2;
+    font-weight: 700;
+}
+
+.slds-table td {
+    vertical-align: middle;
+}
+
+.action-link {
+    color: #0070d2; /* Salesforce Blue */
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.action-link:hover {
+    text-decoration: underline;
+    color: #005fb2; /* Darker Blue on hover */
+}
+
+.slds-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
