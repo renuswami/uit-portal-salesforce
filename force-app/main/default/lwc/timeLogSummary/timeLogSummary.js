@@ -3,6 +3,7 @@ import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getTimeLogSummaries from '@salesforce/apex/TimeLogSummaryController.getTimeLogSummaries';
 import getEmployeeReportId from '@salesforce/apex/TimeLogSummaryController.getEmployeeReportId';
+import getAttendanceReportId from '@salesforce/apex/TimeLogSummaryController.getAttendanceReportId';
 
 export default class TimeLogSummary extends NavigationMixin(LightningElement) {
     @track summaries = [];
@@ -191,6 +192,42 @@ export default class TimeLogSummary extends NavigationMixin(LightningElement) {
                         new ShowToastEvent({
                             title: 'Report Not Found',
                             message: 'No allocation report found for ' + employeeName,
+                            variant: 'warning'
+                        })
+                    );
+                }
+            })
+            .catch(error => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error',
+                        message: 'Error fetching report: ' + (error.body ? error.body.message : error.message),
+                        variant: 'error'
+                    })
+                );
+            });
+    }
+
+    handleAttendanceReport(event) {
+        event.preventDefault();
+        const employeeName = event.target.dataset.name;
+        
+        getAttendanceReportId({ employeeName: employeeName })
+            .then(reportId => {
+                if (reportId) {
+                    this[NavigationMixin.Navigate]({
+                        type: 'standard__recordPage',
+                        attributes: {
+                            recordId: reportId,
+                            objectApiName: 'Report',
+                            actionName: 'view'
+                        }
+                    });
+                } else {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Report Not Found',
+                            message: 'No attendance report found for ' + employeeName,
                             variant: 'warning'
                         })
                     );

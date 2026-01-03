@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
     <lightning-card title="Project Hierarchy" icon-name="standard:hierarchy">
         <div class="slds-p-around_medium">
             
@@ -11,15 +12,16 @@
                     <!-- Level 1: Projects -->
                     <template for:each={hierarchyData} for:item="project">
                         <li key={project.id} role="treeitem" aria-expanded={project.isExpanded}>
-                            <div class="slds-tree__item project-row" onclick={toggleProject} data-id={project.id}>
+                            <div class="slds-tree__item project-row slds-grid slds-grid_vertical-align-center" onclick={toggleProject} data-id={project.id}>
                                 <lightning-button-icon 
                                     icon-name={project.iconName} 
                                     variant="bare" 
                                     class="slds-m-right_small"
                                     size="small">
                                 </lightning-button-icon>
-                                <span class="slds-truncate" title={project.name}>
-                                    <strong>{project.name}</strong>
+                                <lightning-icon icon-name="standard:product" size="small" class="slds-m-right_small"></lightning-icon>
+                                <span class="slds-truncate slds-text-heading_small" title={project.name}>
+                                    {project.name}
                                 </span>
                             </div>
 
@@ -38,9 +40,11 @@
                                                         </lightning-button-icon>
                                                     </template>
                                                     <template if:true={task.hasNoSubTasks}>
-                                                        <lightning-icon icon-name="utility:record" size="x-small" class="slds-icon-text-light"></lightning-icon>
+                                                        <span class="slds-icon_container slds-m-left_small"></span>
                                                     </template>
                                                 </div>
+                                                
+                                                <lightning-icon icon-name="standard:task" size="small" class="slds-m-right_small"></lightning-icon>
                                                 
                                                 <div class="slds-col slds-truncate slds-p-right_small" title={task.name}>
                                                     {task.name}
@@ -59,16 +63,51 @@
                                                 </div>
                                             </div>
 
+                                            <!-- Task Details (Leaf Node) -->
+                                            <template if:true={task.showDetails}>
+                                                <div class="slds-box slds-theme_shade slds-m-horizontal_medium slds-m-bottom_medium slds-m-left_xx-large">
+                                                    <div class="slds-grid slds-wrap slds-gutters">
+                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                            <lightning-input label="Name" value={task.name} readonly></lightning-input>
+                                                        </div>
+                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                            <lightning-input label="Status" value={task.status} readonly></lightning-input>
+                                                        </div>
+                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                            <lightning-input label="Assigned To" value={task.assignedToName} readonly></lightning-input>
+                                                        </div>
+                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                            <lightning-input label="Priority" value={task.priority} readonly></lightning-input>
+                                                        </div>
+                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                            <lightning-input type="date" label="Due Date" value={task.dueDate} readonly></lightning-input>
+                                                        </div>
+                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                            <lightning-input type="number" label="Estimated Hours" value={task.estimatedHours} readonly></lightning-input>
+                                                        </div>
+                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                            <lightning-input type="number" label="Actual Hours" value={task.actualHours} readonly></lightning-input>
+                                                        </div>
+                                                        <div class="slds-col slds-size_1-of-1 slds-p-bottom_small">
+                                                            <label class="slds-form-element__label">Description</label>
+                                                            <lightning-formatted-rich-text value={task.description}></lightning-formatted-rich-text>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+
                                             <!-- Level 3: Sub Tasks -->
                                             <template if:true={task.isExpanded}>
                                                 <ul role="group">
                                                     <template for:each={task.subTasks} for:item="subTask">
                                                         <li key={subTask.id} role="treeitem">
                                                             <div class="slds-tree__item subtask-row slds-grid slds-grid_vertical-align-center slds-p-left_xx-large" onclick={handleSubTaskClick} data-id={subTask.id} data-task-id={task.id} data-project-id={project.id}>
-                                                                <div class="slds-shrink-none slds-m-right_small">
-                                                                    <lightning-icon icon-name="utility:record" size="x-small" class="slds-icon-text-light"></lightning-icon>
+                                                                <div class="slds-shrink-none slds-m-right_small slds-m-left_large">
+                                                                    <!-- Indentation spacer -->
                                                                 </div>
                                                                 
+                                                                <lightning-icon icon-name="standard:task" size="small" class="slds-m-right_small"></lightning-icon>
+
                                                                 <div class="slds-col slds-truncate slds-p-right_small" title={subTask.name}>
                                                                     {subTask.name}
                                                                 </div>
@@ -85,6 +124,39 @@
                                                                     </span>
                                                                 </div>
                                                             </div>
+
+                                                            <!-- Subtask Details -->
+                                                            <template if:true={subTask.showDetails}>
+                                                                <div class="slds-box slds-theme_shade slds-m-horizontal_medium slds-m-bottom_medium slds-m-left_xx-large">
+                                                                    <div class="slds-grid slds-wrap slds-gutters">
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                                            <lightning-input label="Name" value={subTask.name} readonly></lightning-input>
+                                                                        </div>
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                                            <lightning-input label="Status" value={subTask.status} readonly></lightning-input>
+                                                                        </div>
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                                            <lightning-input label="Assigned To" value={subTask.assignedToName} readonly></lightning-input>
+                                                                        </div>
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                                            <lightning-input label="Priority" value={subTask.priority} readonly></lightning-input>
+                                                                        </div>
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                                            <lightning-input type="date" label="Due Date" value={subTask.dueDate} readonly></lightning-input>
+                                                                        </div>
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                                            <lightning-input type="number" label="Estimated Hours" value={subTask.estimatedHours} readonly></lightning-input>
+                                                                        </div>
+                                                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
+                                                                            <lightning-input type="number" label="Actual Hours" value={subTask.actualHours} readonly></lightning-input>
+                                                                        </div>
+                                                                        <div class="slds-col slds-size_1-of-1 slds-p-bottom_small">
+                                                                            <label class="slds-form-element__label">Description</label>
+                                                                            <lightning-formatted-rich-text value={subTask.description}></lightning-formatted-rich-text>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
                                                         </li>
                                                     </template>
                                                     <template if:true={task.hasNoSubTasks}>
@@ -117,52 +189,239 @@
             </template>
         </div>
     </lightning-card>
+=======
+    <div class="main-container">
+        
+        <!-- Center Panel (Tree Table) -->
+        <div class="center-panel">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="toolbar-title">Active Projects</div>
+            </div>
 
-    <!-- Task Detail Modal -->
-    <template if:true={selectedTask}>
-        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-modal="true">
-            <div class="slds-modal__container">
-                <header class="slds-modal__header">
-                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
-                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
-                        <span class="slds-assistive-text">Close</span>
-                    </button>
-                    <h2 class="slds-text-heading_medium slds-hyphenate">Task Details</h2>
-                </header>
-                <div class="slds-modal__content slds-p-around_medium">
-                    <div class="slds-grid slds-wrap slds-gutters">
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
-                            <lightning-input label="Name" value={selectedTask.name} readonly></lightning-input>
+            <!-- Table Header -->
+            <div class="tree-table-header">
+                <div>Name</div>
+                <div>Assignee</div>
+                <div>Status</div>
+                <div>Start Date</div>
+                <div>Due Date</div>
+                <div>Effort</div>
+            </div>
+
+            <!-- Tree Rows -->
+            <div class="tree-container">
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+                </template>
+
+                <template for:each={flattenedData} for:item="row">
+                    <div key={row.id} 
+                         class={row.rowClass} 
+                         onclick={handleRowClick}
+                         data-id={row.id}
+                         data-type={row.type}>
+                         
+                        <!-- Name Column (Indented Tree) -->
+                        <div class="tree-cell name-cell">
+                            <div class={row.indentClass}></div> <!-- Indentation Spacer -->
+                            
+                            <template if:true={row.hasChildren}>
+                                <lightning-button-icon 
+                                    icon-name={row.iconName} 
+                                    variant="bare" 
+                                    size="small" 
+                                    onclick={handleToggle} 
+                                    data-id={row.id}
+                                    class="slds-m-right_x-small">
+                                </lightning-button-icon>
+                            </template>
+                            <template if:false={row.hasChildren}>
+                                <span class="slds-m-left_large"></span>
+                            </template>
+
+                            <!-- Icons based on Type -->
+                            <template if:true={row.isProject}>
+                                <lightning-icon icon-name="standard:product" size="x-small" class="slds-m-right_small"></lightning-icon>
+                            </template>
+                            <template if:false={row.isProject}>
+                                <lightning-icon icon-name="standard:task" size="x-small" class="slds-m-right_small"></lightning-icon>
+                            </template>
+                            
+                            <span title={row.name} class="slds-truncate">{row.name}</span>
                         </div>
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
-                            <lightning-input label="Status" value={selectedTask.status} readonly></lightning-input>
+
+                        <!-- Assignee -->
+                        <div class="tree-cell">
+                            <template if:true={row.assignedToName}>
+                                <span class="slds-avatar slds-avatar_circle slds-avatar_x-small slds-m-right_x-small custom-avatar">
+                                    <abbr class="slds-avatar__initials" title={row.assignedToName}>{row.initials}</abbr>
+                                </span>
+                                <span class="slds-truncate">{row.assignedToName}</span>
+                            </template>
                         </div>
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
-                            <lightning-input label="Assigned To" value={selectedTask.assignedToName} readonly></lightning-input>
+
+                        <!-- Status -->
+                        <div class="tree-cell">
+                            <span class={row.badgeClass}>{row.status}</span>
                         </div>
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
-                            <lightning-input label="Priority" value={selectedTask.priority} readonly></lightning-input>
+
+                        <!-- Start Date -->
+                        <div class="tree-cell">
+                            <template if:true={row.startDate}>
+                                <lightning-formatted-date-time value={row.startDate}></lightning-formatted-date-time>
+                            </template>
                         </div>
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
-                            <lightning-input type="date" label="Due Date" value={selectedTask.dueDate} readonly></lightning-input>
+
+                        <!-- Due Date -->
+                        <div class="tree-cell">
+                            <template if:true={row.dueDate}>
+                                <lightning-formatted-date-time value={row.dueDate}></lightning-formatted-date-time>
+                            </template>
                         </div>
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
-                            <lightning-input type="number" label="Estimated Hours" value={selectedTask.estimatedHours} readonly></lightning-input>
-                        </div>
-                         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-bottom_small">
-                            <lightning-input type="number" label="Actual Hours" value={selectedTask.actualHours} readonly></lightning-input>
-                        </div>
-                        <div class="slds-col slds-size_1-of-1 slds-p-bottom_small">
-                            <label class="slds-form-element__label">Description</label>
-                            <lightning-formatted-rich-text value={selectedTask.description}></lightning-formatted-rich-text>
+
+                        <!-- Effort -->
+                        <div class="tree-cell">
+                            <template if:true={row.estimatedHours}>
+                                {row.estimatedHours}h
+                            </template>
                         </div>
                     </div>
-                </div>
-                <footer class="slds-modal__footer">
-                    <button class="slds-button slds-button_neutral" onclick={closeModal}>Close</button>
-                </footer>
+                </template>
             </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open"></div>
-    </template>
+        </div>
+
+        <!-- Right Panel (Detail View) -->
+        <template if:true={selectedTask}>
+            <div class="right-panel">
+                <div class="detail-header">
+                    <h2 class="slds-text-heading_small slds-m-bottom_xx-small">Task Detail</h2>
+                    <div class="toolbar-title">{selectedTask.name}</div>
+                </div>
+                <div class="detail-body">
+                    <!-- Main Details Section -->
+                    <div class="slds-grid slds-wrap slds-gutters_x-small">
+                        <!-- Row 1 -->
+                        <div class="slds-col slds-size_1-of-2 detail-field">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value">
+                                <template if:true={selectedTask.status}>{selectedTask.status}</template>
+                                <template if:false={selectedTask.status}>--</template>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 detail-field">
+                            <div class="detail-label">Priority</div>
+                            <div class="detail-value">
+                                <template if:true={selectedTask.priority}>{selectedTask.priority}</template>
+                                <template if:false={selectedTask.priority}>--</template>
+                            </div>
+                        </div>
+                        
+                        <!-- Row 2 -->
+                        <div class="slds-col slds-size_1-of-2 detail-field">
+                            <div class="detail-label">Project Task</div>
+                            <div class="detail-value">
+                                <template if:true={selectedTask.parentTaskName}>{selectedTask.parentTaskName}</template>
+                                <template if:false={selectedTask.parentTaskName}>--</template>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 detail-field">
+                            <div class="detail-label">Estimated Hours</div>
+                            <div class="detail-value">
+                                <template if:true={selectedTask.estimatedHours}>{selectedTask.estimatedHours}</template>
+                                <template if:false={selectedTask.estimatedHours}>--</template>
+                            </div>
+                        </div>
+
+                        <!-- Row 3 -->
+                        <div class="slds-col slds-size_1-of-2 detail-field">
+                            <div class="detail-label">Related Project</div>
+                            <div class="detail-value">
+                                <template if:true={selectedTask.relatedProject}>{selectedTask.relatedProject}</template>
+                                <template if:false={selectedTask.relatedProject}>--</template>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 detail-field">
+                            <div class="detail-label">Approved Logged Hours</div>
+                            <div class="detail-value">
+                                <template if:true={selectedTask.approvedLoggedHours}>{selectedTask.approvedLoggedHours}</template>
+                                <template if:false={selectedTask.approvedLoggedHours}>--</template>
+                            </div>
+                        </div>
+
+                        <!-- Row 4: Description -->
+                        <div class="slds-col slds-size_1-of-1 detail-field">
+                            <div class="detail-label">Description</div>
+                            <div class="detail-value">
+                                <template if:true={selectedTask.description}>
+                                    <lightning-formatted-rich-text value={selectedTask.description}></lightning-formatted-rich-text>
+                                </template>
+                                <template if:false={selectedTask.description}>--</template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section Divider -->
+                    <div class="slds-text-heading_small slds-p-top_medium slds-p-bottom_small slds-border_bottom">Task Hours</div>
+                    
+                    <!-- Task Hours Section -->
+                    <div class="slds-grid slds-wrap slds-gutters_x-small slds-p-top_small">
+                        <!-- Logic for Parent Task (Project Task) -->
+                        <template if:true={isProjectTask}>
+                            <!-- Row 1 -->
+                            <div class="slds-col slds-size_1-of-2 detail-field">
+                                <div class="detail-label">Time Log Billable</div>
+                                <div class="detail-value">
+                                    <template if:true={selectedTask.actualHours}>{selectedTask.actualHours}</template>
+                                    <template if:false={selectedTask.actualHours}>--</template>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 detail-field">
+                                <div class="detail-label">Total Billable Hours</div>
+                                <div class="detail-value">
+                                     <template if:true={selectedTask.totalSubTaskHours}>{selectedTask.totalSubTaskHours}</template>
+                                     <template if:false={selectedTask.totalSubTaskHours}>--</template>
+                                </div>
+                            </div>
+                            <!-- Row 2 -->
+                            <div class="slds-col slds-size_1-of-2 detail-field">
+                                <div class="detail-label">Time Log Non-Billable</div>
+                                <div class="detail-value">
+                                    <template if:true={selectedTask.actualNonBillableHours}>{selectedTask.actualNonBillableHours}</template>
+                                    <template if:false={selectedTask.actualNonBillableHours}>--</template>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 detail-field">
+                                <div class="detail-label">Total Non-Billable Hours</div>
+                                <div class="detail-value">
+                                    <template if:true={selectedTask.totalSubTaskNonBillableHours}>{selectedTask.totalSubTaskNonBillableHours}</template>
+                                    <template if:false={selectedTask.totalSubTaskNonBillableHours}>--</template>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Logic for Sub-Task -->
+                        <template if:false={isProjectTask}>
+                            <!-- Row 1 -->
+                            <div class="slds-col slds-size_1-of-2 detail-field">
+                                <div class="detail-label">Total Billable Sub-Task Hours</div>
+                                <div class="detail-value">
+                                    <template if:true={selectedTask.actualHours}>{selectedTask.actualHours}</template>
+                                    <template if:false={selectedTask.actualHours}>--</template>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 detail-field">
+                                <div class="detail-label">Total Non-Billable Sub-Task Hours</div>
+                                <div class="detail-value">
+                                    <template if:true={selectedTask.actualNonBillableHours}>{selectedTask.actualNonBillableHours}</template>
+                                    <template if:false={selectedTask.actualNonBillableHours}>--</template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+>>>>>>> rescue-work
 </template>

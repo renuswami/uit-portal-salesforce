@@ -17,18 +17,16 @@ public with sharing class ProjectHierarchyController {
             }
             
             // 2. Fetch All Project Tasks
-            // Corrected Field Names: 
-            // Parent Task field is Project_Task__c (Self Lookup)
-            // Assigned To is Assigned_To__c
-            // Start Date not on Task, using Due_Date__c as End Date? Or CreatedDate as Start?
-            // User provided fields: Due_Date__c (Date), Priority__c (Picklist), Status__c (Picklist), Description__c (Rich Text), Assigned_To__c (Lookup)
-            // Parent_Task__c field name in schema provided is "Project_Task__c" (Label: Project Task)
-            
             allTasks = [
-                SELECT Id, Name, Project__c, Project_Task__c, 
+                SELECT Id, Name, Project__c, Project_Task__c, Project_Task__r.Name,
                        Status__c, Assigned_To__c, Assigned_To__r.Name, 
                        Due_Date__c, Description__c, Priority__c,
-                       Estimated_Hours__c, Actual_Hours__c
+                       Estimated_Hours__c, Actual_Hours__c,
+                       Approved_Logged_Hours__c,
+                       Related_Project__c,
+                       Actual_Non_Billable_Hours__c,
+                       Total_Sub_Task_Hours__c,
+                       Total_Sub_Task_Non_Billable_Hours__c
                 FROM Project_Task__c 
                 WHERE Project__c IN :projectMap.keySet()
                    OR Project_Task__r.Project__c IN :projectMap.keySet()
@@ -95,9 +93,17 @@ public with sharing class ProjectHierarchyController {
         @AuraEnabled public String priority;
         @AuraEnabled public String description;
         @AuraEnabled public Decimal estimatedHours;
-        @AuraEnabled public Decimal actualHours;
+        @AuraEnabled public Decimal actualHours; // Billable
         @AuraEnabled public List<TaskWrapper> subTasks;
         @AuraEnabled public Project_Task__c record; 
+
+        // New Fields
+        @AuraEnabled public String parentTaskName;
+        @AuraEnabled public String relatedProject;
+        @AuraEnabled public Decimal approvedLoggedHours;
+        @AuraEnabled public Decimal actualNonBillableHours;
+        @AuraEnabled public Decimal totalSubTaskHours; // Billable
+        @AuraEnabled public Decimal totalSubTaskNonBillableHours;
         
         public TaskWrapper(Project_Task__c t) {
             this.id = t.Id;
@@ -109,9 +115,17 @@ public with sharing class ProjectHierarchyController {
             this.priority = t.Priority__c;
             this.description = t.Description__c;
             this.estimatedHours = t.Estimated_Hours__c;
-            this.actualHours = t.Actual_Hours__c;
+            this.actualHours = t.Actual_Hours__c; // Time Log Billable
             this.subTasks = new List<TaskWrapper>();
             this.record = t;
+
+            // Map New Fields
+            this.parentTaskName = t.Project_Task__r != null ? t.Project_Task__r.Name : '';
+            this.relatedProject = t.Related_Project__c;
+            this.approvedLoggedHours = t.Approved_Logged_Hours__c;
+            this.actualNonBillableHours = t.Actual_Non_Billable_Hours__c;
+            this.totalSubTaskHours = t.Total_Sub_Task_Hours__c;
+            this.totalSubTaskNonBillableHours = t.Total_Sub_Task_Non_Billable_Hours__c;
         }
     }
 }

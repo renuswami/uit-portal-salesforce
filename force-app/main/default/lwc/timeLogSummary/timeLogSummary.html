@@ -130,11 +130,16 @@
                                     </div>
                                 </template>
 
-                                <!-- Last Row: Employee Name and Report View Action -->
-                                <div class="slds-text-align_center slds-p-top_x-small">
-                                    <div class="slds-text-heading_small">
-                                        {summary.employeeName}
-                                        <a href="#" class="slds-m-left_small action-link" data-name={summary.employeeName} onclick={handleReportView}>Report View</a>
+                                <div class="slds-grid slds-grid_align-spread slds-wrap slds-p-top_x-small slds-border_top slds-p-top_small slds-m-top_small card-footer">
+                                    <div class="slds-col">
+                                        <div class="slds-text-heading_small slds-truncate" title={summary.employeeName}>{summary.employeeName}</div>
+                                    </div>
+                                    <div class="slds-col slds-text-align_right">
+                                        <div class="action-links">
+                                            <a href="#" class="action-link" data-name={summary.employeeName} onclick={handleReportView}>Report View</a>
+                                            <span class="separator">|</span>
+                                            <a href="#" class="action-link" data-name={summary.employeeName} onclick={handleAttendanceReport}>Attendance Report</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
