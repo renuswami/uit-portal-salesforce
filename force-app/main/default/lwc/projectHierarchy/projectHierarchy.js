@@ -4,7 +4,6 @@ import getProjectHierarchy from '@salesforce/apex/ProjectHierarchyController.get
 export default class ProjectHierarchy extends LightningElement {
     @track hierarchyData = [];
     @track isLoading = true;
-    @track selectedTask = null;
 
     @wire(getProjectHierarchy)
     wiredHierarchy({ error, data }) {
@@ -31,6 +30,7 @@ export default class ProjectHierarchy extends LightningElement {
                     return {
                         ...task,
                         isExpanded: false,
+                        showDetails: false,
                         // If no subtasks, show record icon (leaf node), otherwise chevron (expandable)
                         iconName: hasSubTasks ? 'utility:chevronright' : 'utility:record',
                         hasNoSubTasks: !hasSubTasks,
@@ -38,6 +38,7 @@ export default class ProjectHierarchy extends LightningElement {
                         initials: this.getInitials(task.assignedToName),
                         subTasks: hasSubTasks ? task.subTasks.map(subTask => ({
                             ...subTask,
+                            showDetails: false,
                             badgeClass: this.getBadgeClass(subTask.status),
                             initials: this.getInitials(subTask.assignedToName)
                         })) : []
@@ -87,8 +88,8 @@ export default class ProjectHierarchy extends LightningElement {
             const task = project.projectTasks.find(t => t.id === taskId);
             if (task) {
                 if (task.hasNoSubTasks) {
-                    // If no sub-tasks, show details modal
-                    this.selectedTask = task;
+                    // If no sub-tasks, toggle details inline
+                    task.showDetails = !task.showDetails;
                 } else {
                     // If has sub-tasks, toggle expansion
                     task.isExpanded = !task.isExpanded;
@@ -111,13 +112,9 @@ export default class ProjectHierarchy extends LightningElement {
             if (task) {
                 const subTask = task.subTasks.find(st => st.id === subTaskId);
                 if (subTask) {
-                    this.selectedTask = subTask;
+                    subTask.showDetails = !subTask.showDetails;
                 }
             }
         }
-    }
-
-    closeModal() {
-        this.selectedTask = null;
     }
 }

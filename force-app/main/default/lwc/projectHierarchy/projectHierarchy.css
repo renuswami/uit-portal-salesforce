@@ -1,62 +1,58 @@
+/* Reset to cleaner, standard styles */
 .project-row,
 .task-row,
 .subtask-row {
     cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 0.25rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #f2f2f2;
+    border-bottom: 1px solid #dddbda;
+    border-top: 1px solid transparent; /* Maintain height balance */
+    transition: background-color 0.1s linear;
 }
 
+/* Remove border radius for standard list look */
+.project-row,
+.task-row,
+.subtask-row {
+    border-radius: 0;
+}
+
+/* Hover effect matching Salesforce standard */
 .project-row:hover,
 .task-row:hover,
 .subtask-row:hover {
-    background-color: #f3f9ff; /* Very light blue */
+    background-color: #f3f2f2;
+    box-shadow: inset 4px 0 0 #0070d2; /* Standard active indicator on hover */
 }
 
+/* Project Row Specifics */
 .project-row {
-    font-weight: 700;
-    font-size: 1.05rem;
-    color: #080707;
     background-color: #ffffff;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
+/* Task Row Specifics */
 .task-row {
-    color: #3e3e3c;
-    border-left: 3px solid transparent;
+    background-color: #ffffff;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
 }
 
-.task-row:hover {
-    border-left-color: #0176d3;
-}
-
+/* Subtask Row Specifics */
 .subtask-row {
-    color: #3e3e3c;
-    border-left: 3px solid transparent;
+    background-color: #ffffff;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
 }
 
-.subtask-row:hover {
-    border-left-color: #0176d3;
+/* Badge Tweaks to align with text */
+.slds-badge {
+    line-height: 1.25;
 }
 
-/* Ensure icons are aligned */
-.slds-tree__item {
-    display: flex;
-    align-items: center;
-}
-
-/* Modal sizing */
-.slds-modal__container {
-    max-width: 60rem;
-    width: 70%;
-}
-
-/* Custom Avatar Style */
+/* Custom Avatar Override */
 .custom-avatar {
     background-color: #0176d3;
 }
-
 .custom-avatar .slds-avatar__initials {
     color: white;
 }
