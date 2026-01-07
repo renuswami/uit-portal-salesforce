@@ -1,0 +1,31 @@
+<!-- The only change is the title attribute -->
+<template>
+    <lightning-card title={cardTitle} icon-name="utility:clock">
+        <div class="slds-m-around_medium">
+            <p class="slds-m-bottom_medium">
+                Selected Duration: <strong>{durationString}</strong>
+            </p>
+            <lightning-button 
+                label="Select Duration" 
+                onclick={openPicker}>
+            </lightning-button>
+
+            <!-- The modal logic remains exactly the same -->
+            <template if:true={showPicker}>
+                <div class="modal-backdrop slds-backdrop slds-backdrop_open"></div>
+                <section role="dialog" class="slds-modal slds-fade-in-open custom-modal-position">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__content slds-p-around_none">
+                            <c-duration-picker
+                                initial-hours={selectedHours}
+                                initial-minutes={selectedMinutes}
+                                onset={handleDurationSet}
+                                oncancel={handlePickerCancel}>
+                            </c-duration-picker>
+                        </div>
+                    </div>
+                </section>
+            </template>
+        </div>
+    </lightning-card>
+</template>

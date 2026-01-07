@@ -1,0 +1,55 @@
+.holiday-box {
+    border: 1px solid #d8dde6;
+    border-radius: 10px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Section Title */
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-left: 4px;
+}
+
+/* Event List */
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual Event Item */
+.event-item {
+    border: 1px solid #e6e6e6;
+    background: #fafafa;
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.event-date {
+    font-weight: bold;
+    color: #0277bd;
+}
+
+.event-name {
+    flex: 1;
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+.event-type {
+    color: #888;
+}
+
+.no-events {
+    padding: 15px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}

@@ -1,0 +1,89 @@
+<template>
+    <lightning-card title="Work Session History" icon-name="standard:timesheet">
+        <div slot="actions">
+            <lightning-button 
+                label="Refresh" 
+                onclick={refreshSessions}
+                variant="neutral">
+            </lightning-button>
+        </div>
+        
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- Error State -->
+            <template if:true={hasError}>
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>Error loading work sessions: {error.body.message}</h2>
+                </div>
+            </template>
+
+            <!-- No Sessions State -->
+            <template if:false={hasSessions}>
+                <template if:false={hasError}>
+                    <div class="slds-text-align_center slds-p-around_large">
+                        <lightning-icon icon-name="standard:timesheet" size="large" class="slds-m-bottom_small"></lightning-icon>
+                        <p class="slds-text-heading_small">{noSessionsMessage}</p>
+                    </div>
+                </template>
+            </template>
+
+            <!-- Sessions Table -->
+            <template if:true={hasSessions}>
+                <div class="slds-scrollable_x">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Session">Session</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Check In">Check In</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Check Out">Check Out</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Duration">Duration</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Status">Status</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Account">Account</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={sessions} for:item="session">
+                                <tr key={session.Id} class="slds-hint-parent">
+                                    <td data-label="Session">
+                                        <div class="slds-truncate" title={session.Name}>{session.Name}</div>
+                                    </td>
+                                    <td data-label="Check In">
+                                        <div class="slds-truncate">{session.formattedCheckIn}</div>
+                                    </td>
+                                    <td data-label="Check Out">
+                                        <div class="slds-truncate">{session.formattedCheckOut}</div>
+                                    </td>
+                                    <td data-label="Duration">
+                                        <div class="slds-truncate">{session.formattedDuration}</div>
+                                    </td>
+                                    <td data-label="Status">
+                                        <span class={session.statusClass}>
+                                            {session.Status__c}
+                                        </span>
+                                    </td>
+                                    <td data-label="Account">
+                                        <div class="slds-truncate" title={session.Account__r.Name}>
+                                            {session.Account__r.Name}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

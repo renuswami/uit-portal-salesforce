@@ -1,0 +1,261 @@
+/* Header Banner Styling */
+.header-banner {
+    background: linear-gradient(135deg, #1589ee 0%, #0070d2 100%);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+/* Form Section Styling */
+.form-section {
+    position: relative;
+}
+
+.project-selector lightning-combobox {
+    --slds-c-combobox-color-border: #d8dde6;
+    --slds-c-combobox-color-border-focus: #1589ee;
+}
+
+.project-info {
+    animation: slideDown 0.3s ease-out;
+}
+
+.selected-task {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Task Dropdown Styling */
+.task-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: white;
+    border: 1px solid #d8dde6;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 2px;
+}
+
+.task-dropdown .slds-dropdown__item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.task-dropdown .slds-dropdown__item:hover {
+    background-color: #f4f6f9;
+}
+
+.task-dropdown .slds-dropdown__item:last-child {
+    border-bottom: none;
+}
+
+/* Time Entry Section */
+.time-entry-section {
+    background: #fafbfc;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.time-entry-section h3 {
+    color: #080707;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Quick Hours Buttons */
+.quick-hours lightning-button-group {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.quick-hours lightning-button {
+    --slds-c-button-neutral-color-background: #f3f3f3;
+    --slds-c-button-neutral-color-background-hover: #e5e5e5;
+    --slds-c-button-neutral-color-border: #d8dde6;
+}
+
+/* Action Buttons */
+.action-buttons {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e5e5;
+}
+
+.action-buttons lightning-button[variant="brand"] {
+    --slds-c-button-brand-color-background: #1589ee;
+    --slds-c-button-brand-color-background-hover: #0070d2;
+    min-width: 120px;
+}
+
+/* Recent Logs Section */
+.recent-logs-section {
+    border-top: 2px solid #e5e5e5;
+    padding-top: 1.5rem;
+}
+
+.recent-logs-section .slds-section__title {
+    background: #f4f6f9;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.recent-logs-section .slds-section__title-action {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    color: #080707;
+    font-weight: 600;
+}
+
+.log-item {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.log-item:hover {
+    border-color: #1589ee;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-banner {
+        padding: 1rem !important;
+    }
+    
+    .time-entry-section {
+        padding: 1rem;
+    }
+    
+    .quick-hours lightning-button-group {
+        flex-wrap: wrap;
+    }
+    
+    .action-buttons {
+        text-align: center;
+    }
+    
+    .action-buttons lightning-button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Success/Error Message Styling */
+.slds-notify {
+    border-radius: 6px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Focus States */
+lightning-input:focus-within,
+lightning-combobox:focus-within,
+lightning-textarea:focus-within {
+    --slds-c-input-color-border-focus: #1589ee;
+    --slds-c-input-shadow-focus: 0 0 3px #1589ee40;
+}
+
+/* Loading States */
+.form-section.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Custom Scrollbar for Recent Logs */
+.slds-scrollable_y::-webkit-scrollbar {
+    width: 6px;
+}
+
+.slds-scrollable_y::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.slds-scrollable_y::-webkit-scrollbar-thumb {
+    background: #c1c7cd;
+    border-radius: 3px;
+}
+
+.slds-scrollable_y::-webkit-scrollbar-thumb:hover {
+    background: #a8b0b8;
+}
+
+/* Enhanced Visual Hierarchy */
+.project-info .slds-box,
+.selected-task .slds-box {
+    border-left: 4px solid #1589ee;
+}
+
+.selected-task .slds-box {
+    border-left-color: #04844b;
+}
+
+/* Improved Typography */
+.header-banner h2 {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
+.header-banner p {
+    opacity: 0.9;
+}
+
+/* Interactive Elements */
+.task-dropdown .slds-dropdown__item:active {
+    background-color: #e8f4fd;
+}
+
+/* Accessibility Improvements */
+.task-dropdown .slds-dropdown__item:focus {
+    outline: 2px solid #1589ee;
+    outline-offset: -2px;
+    background-color: #e8f4fd;
+}
+
+/* Card Enhancements */
+lightning-card {
+    --slds-c-card-color-background: #ffffff;
+    --slds-c-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --slds-c-card-radius-border: 8px;
+}
+
+/* Form Validation Visual Feedback */
+lightning-input[data-invalid="true"],
+lightning-combobox[data-invalid="true"] {
+    --slds-c-input-color-border: #ea001e;
+    --slds-c-input-color-border-focus: #ea001e;
+}

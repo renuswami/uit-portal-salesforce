@@ -1,0 +1,46 @@
+.custom-card-total {
+    border-top: 4px solid #0070d2;
+}
+
+.custom-card-working {
+    border-top: 4px solid #ff9a3c;
+}
+
+.custom-card-present {
+    border-top: 4px solid #4bca81;
+}
+
+.custom-card-absent {
+    border-top: 4px solid #c23934;
+}
+
+.custom-card-regularization {
+    border-top: 4px solid #8e44ad;
+}
+
+.custom-card-approved {
+    border-top: 4px solid #04844b;
+}
+
+.custom-card-pending {
+    border-top: 4px solid #ffb75d;
+}
+
+.custom-card-rejected {
+    border-top: 4px solid #ea001e;
+}
+
+.slds-card {
+    transition: transform 0.2s ease-in-out;
+    min-height: 120px;
+}
+
+.slds-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.slds-text-heading_large {
+    font-size: 2rem;
+    font-weight: bold;
+}

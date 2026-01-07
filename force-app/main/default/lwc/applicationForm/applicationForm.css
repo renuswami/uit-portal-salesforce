@@ -1,0 +1,62 @@
+.application-form-container {
+    max-width: 900px; 
+    margin: 0 auto; 
+    border: 1px solid #fffefe;
+    border-radius: 8px; 
+    background-color: #fffefe;
+}
+
+.card-header-center {
+    /* Centering */
+    text-align: center;
+    
+    /* Typography */
+    font-size: 2.0rem; /* Large, noticeable title */
+    font-weight: 700; /* Bold */
+    color: #800080; 
+    
+    /* Spacing and Decoration */
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    
+    /* Attractive Separator Line */
+    border-bottom: 3px solid #800080; 
+    border-image: linear-gradient(to right, #ffffff00 5%, #800080, #ffffff00 95%); 
+    border-image-slice: 1;
+}
+
+/* 1. Vertical Accent Bar Style */
+.form-accent-wrapper {
+    /* Use the purple brand color for a subtle vertical line on the left */
+    border-left: 4px solid #800080; /* Purple color, you can change this to match the Orange if preferred: #FF8C00 */
+    padding-left: 3rem; /* Ensure space between the line and content */
+    /* Adjusting to compensate for the slds-p-around_medium which is 1rem */
+    margin-left: -1rem; 
+    padding-right: 3rem; /* Re-apply padding on the right */
+}
+
+/* 2. Submit Button Color Change to Purple (#800080) */
+/* This uses the LWC CSS Custom Properties for reliable color change */
+.purple-submit-button {
+    --sds-c-button-brand-color-background: #800080;
+    --sds-c-button-brand-color-border: #800080;
+    --sds-c-button-brand-color-background-hover: #6a006a; 
+    --sds-c-button-brand-color-border-hover: #6a006a;
+}
+
+/* 3. Icon Color Placeholder (for future attempt/if environment allows) */
+.purple-icon-header {
+    --sds-c-icon-color-foreground: #800080;
+    --sds-c-icon-color-foreground-default: #800080;
+    /* Optional: Change the header text color to purple too, for more consistency */
+    /* color: #800080; */ 
+}
+
+/* 4. Style adjustments for section titles */
+.slds-text-heading_small {
+    font-weight: 600; 
+    /* color: #3e3e3c; */
+    color: #4a4a4a; /* Slightly darker for better contrast/professionalism */
+}
+
+/* Remove any unused styles from previous attempts */

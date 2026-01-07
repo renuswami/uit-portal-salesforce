@@ -1,0 +1,86 @@
+<template>
+    <div class="leave-request-container input-row">
+
+        <div class="slds-p-around_medium">
+            <!-- Leave Type -->
+            <div class="slds-m-top_small">
+                <lightning-combobox
+                    label="Leave Type"
+                    value={leaveType}
+                    placeholder="Select Leave Type"
+                    options={leaveTypeOptions}
+                    onchange={handleLeaveTypeChange}>
+                </lightning-combobox>
+                 <template if:true={balanceInfo}>
+                    <div class="slds-text-color_success slds-m-top_xx-small">
+                        {balanceInfo}
+                    </div>
+                </template>
+            </div>
+
+            <!-- Start and End Date -->
+            <div class="input-row">
+                <lightning-input type="date"
+                                 label="Start Date"
+                                 value={startDate}
+                                 onchange={handleStartDateChange}>
+                </lightning-input>
+
+                <lightning-input type="date"
+                                 label="End Date"
+                                 value={endDate}
+                                 onchange={handleEndDateChange}>
+                </lightning-input>
+                 <lightning-input label="Total Days"
+                                 value={totalDaysDisplay}
+                                 disabled>
+                </lightning-input>
+            </div>
+
+            <!-- Full Day/Half Day Selection -->
+            <div class="slds-m-top_small">
+                <lightning-radio-group
+                    label=""
+                    options={dayTypeOptions}
+                    value={dayType}
+                    type="radio"
+                    onchange={handleDayTypeChange}
+                    class="radio-group-custom">
+                </lightning-radio-group>
+            </div>
+
+            <!-- Half Day Details -->
+            <template if:true={showHalfDayOptions}>
+                <div class="slds-m-top_small">
+                    <lightning-combobox
+                        label="Half Day Type"
+                        value={halfDayType}
+                        placeholder="Select Half"
+                        options={halfDayOptions}
+                        onchange={handleHalfDayChange}>
+                    </lightning-combobox>
+                </div>
+            </template>
+
+            <!-- Description -->
+            <div class="slds-m-top_small">
+                <lightning-textarea
+                    label="Description"
+                    value={description}
+                    onchange={handleDescriptionChange}>
+                </lightning-textarea>
+            </div>
+
+           <template if:true={submitButtonControl}>
+            <div class="slds-m-top_small">
+            <lightning-button 
+                label="Submit"
+                variant="brand"
+                onclick={handleSubmit}>
+            </lightning-button>
+        </div>
+        </template>
+
+        </div>
+    </div>
+</template>

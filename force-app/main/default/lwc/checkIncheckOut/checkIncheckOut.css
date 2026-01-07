@@ -1,0 +1,101 @@
+.wrapper {
+    width: 100%;
+    font-family: sans-serif;
+	margin: 2em;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.day-col {
+    width: 70px;
+    text-align: left;
+}
+
+.day {
+    font-weight: 600;
+}
+
+.date {
+    font-size: 12px;
+    color: #666;
+}
+
+.timeline {
+    flex: 1;
+    position: relative;
+    height: 6px;
+    display: flex;
+    align-items: center;
+}
+
+.line {
+    width: 97%;
+    height: 3px;
+    background: #dcdcdc;
+    border-radius: 5px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: #e53935;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.start {
+    left: 10%;
+    background: #43a047;
+}
+
+.end {
+    right: 10%;
+    background: #e53935;
+}
+
+.status-tag {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #eee;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #444;
+    white-space: nowrap;
+}
+
+.absent {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.weekend {
+    background: #fff3cd;
+    color: #b36b00;
+}
+
+.halfday {
+    background: #ffe0b2;
+    color: #d35400;
+}
+
+.hours {
+    width: 100px;
+    text-align: left;
+}
+
+.time {
+    font-weight: 600;
+}
+
+.text {
+    font-size: 12px;
+    color: #666;
+}

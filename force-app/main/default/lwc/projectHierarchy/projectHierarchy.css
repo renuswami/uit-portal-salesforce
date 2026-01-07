@@ -1,63 +1,3 @@
-<<<<<<< HEAD
-/* Reset to cleaner, standard styles */
-.project-row,
-.task-row,
-.subtask-row {
-    cursor: pointer;
-    border-bottom: 1px solid #dddbda;
-    border-top: 1px solid transparent; /* Maintain height balance */
-    transition: background-color 0.1s linear;
-}
-
-/* Remove border radius for standard list look */
-.project-row,
-.task-row,
-.subtask-row {
-    border-radius: 0;
-}
-
-/* Hover effect matching Salesforce standard */
-.project-row:hover,
-.task-row:hover,
-.subtask-row:hover {
-    background-color: #f3f2f2;
-    box-shadow: inset 4px 0 0 #0070d2; /* Standard active indicator on hover */
-}
-
-/* Project Row Specifics */
-.project-row {
-    background-color: #ffffff;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
-
-/* Task Row Specifics */
-.task-row {
-    background-color: #ffffff;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-}
-
-/* Subtask Row Specifics */
-.subtask-row {
-    background-color: #ffffff;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-}
-
-/* Badge Tweaks to align with text */
-.slds-badge {
-    line-height: 1.25;
-}
-
-/* Custom Avatar Override */
-.custom-avatar {
-    background-color: #0176d3;
-}
-.custom-avatar .slds-avatar__initials {
-    color: white;
-}
-=======
 /* Wrike-like 2-Pane Layout */
 :host {
     display: block; /* Let the container handle flex */
@@ -241,4 +181,3 @@
 /* Utilities */
 .hidden { display: none; }
 .text-red { color: #c23934; }
->>>>>>> rescue-work

@@ -1,0 +1,23 @@
+lightning-card {
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.input-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.radio-group-custom .slds-radio {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.leave-request-container {
+    border: 1px solid #dddbda;
+    border-radius: .15rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem;
+    background: #ffffff;
+    max-width: 700px;      
+}

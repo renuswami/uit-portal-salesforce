@@ -1,0 +1,213 @@
+<template>
+    <lightning-card title="Attendance & Regularization Dashboard" icon-name="standard:timesheet">
+        <div class="slds-p-around_medium">
+            <!-- Month Selector Only -->
+            <div class="slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-combobox
+                        label="Month"
+                        value={selectedMonth}
+                        options={months}
+                        onchange={handleMonthChange}
+                    ></lightning-combobox>
+                </div>
+            </div>
+
+            <!-- First Row: Total Days, Working Days, Present, Absent -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium">
+                <!-- Total Days Card -->
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <div class="slds-card slds-card_boundary custom-card-total">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:event" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span>Total Days</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-text-heading_large slds-text-align_center">
+                                {attendanceData.totalDays}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Working Days Card -->
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <div class="slds-card slds-card_boundary custom-card-working">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:bag" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span>Working Days</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-text-heading_large slds-text-align_center">
+                                {attendanceData.totalWorkingDays}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Present Card -->
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <div class="slds-card slds-card_boundary custom-card-present">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:check" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span>Present</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-text-heading_large slds-text-align_center">
+                                {attendanceData.present}
+                            </div>
+                            <div class="slds-text-body_regular slds-text-align_center slds-m-top_x-small">
+                                {presentPercentage}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Absent Card -->
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <div class="slds-card slds-card_boundary custom-card-absent">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span>Absent</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-text-heading_large slds-text-align_center">
+                                {attendanceData.absent}
+                            </div>
+                            <div class="slds-text-body_regular slds-text-align_center slds-m-top_x-small">
+                                {absentPercentage}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Row: Regularization Applied, Approved, Pending, Rejected -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium">
+                <!-- Regularization Applied Card -->
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <div class="slds-card slds-card_boundary custom-card-regularization">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:upload" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span>Regularization Applied</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-text-heading_large slds-text-align_center">
+                                {attendanceData.regularizationApplied}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approved Card -->
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <div class="slds-card slds-card_boundary custom-card-approved">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:approval" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span>Approved</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-text-heading_large slds-text-align_center">
+                                {attendanceData.approved}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Card -->
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <div class="slds-card slds-card_boundary custom-card-pending">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:clock" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span>Pending</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-text-heading_large slds-text-align_center">
+                                {attendanceData.pending}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rejected Card -->
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <div class="slds-card slds-card_boundary custom-card-rejected">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:block_visitor" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span>Rejected</span>
+                                    </h2>
+                                </div>
+                            </header>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-text-heading_large slds-text-align_center">
+                                {attendanceData.rejected}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

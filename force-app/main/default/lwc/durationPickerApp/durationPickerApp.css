@@ -1,0 +1,12 @@
+/* Custom styles to center the modal containing our component */
+.custom-modal-position {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Override default SLDS container width to fit our component */
+.custom-modal-position .slds-modal__container {
+    width: 300px; /* Match the exact width of c-duration-picker */
+    max-width: none;
+}

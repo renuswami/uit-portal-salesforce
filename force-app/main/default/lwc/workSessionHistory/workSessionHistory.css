@@ -1,0 +1,28 @@
+.status-active {
+    background-color: #4bca81;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-completed {
+    background-color: #706e6b;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.slds-table th {
+    background-color: #f3f2f2;
+    font-weight: 600;
+}
+
+.slds-table tbody tr:hover {
+    background-color: #f8f9fa;
+}

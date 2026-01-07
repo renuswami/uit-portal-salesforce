@@ -1,0 +1,84 @@
+<template>
+    <div class="leave-summary-container">
+
+        <!-- Loading -->
+        <template if:true={loading}>
+            <div class="loading-spinner">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                Loading your leave summary...
+            </div>
+        </template>
+
+        <!-- Error -->
+        <template if:true={error}>
+            <div class="error-message">
+                <div class="error-icon">⚠️</div>
+                <div class="error-text">
+                    <strong>Unable to load leave data</strong>
+                    <div class="error-details">{errorMessage}</div>
+                    <button class="retry-button" onclick={handleRetry}>Try Again</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Main Content -->
+        <template if:true={hasData}>
+
+            <!-- ⭐ NEW BOX WRAPPER ⭐ -->
+            <div class="leave-box">
+
+                <!-- Leave Cards -->
+                <div class="leave-cards-container">
+
+                    <!-- Casual Leave -->
+                    <div class="leave-card">
+                        <div class="leave-type-header">Casual Leave</div>
+                        <div class="leave-details">
+                            <div class="availability">
+                                <div class="available">Available</div>
+                                <div class="count">{casualLeave.available}</div>
+                            </div>
+                            <div class="booked">
+                                <div class="booked-label">Booked</div>
+                                <div class="count-circle">{casualLeave.booked}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sick Leave -->
+                    <div class="leave-card">
+                        <div class="leave-type-header">Sick Leave</div>
+                        <div class="leave-details">
+                            <div class="availability">
+                                <div class="available">Available</div>
+                                <div class="count">{sickLeave.available}</div>
+                            </div>
+                            <div class="booked">
+                                <div class="booked-label">Booked</div>
+                                <div class="count-circle">{sickLeave.booked}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Leaves Taken -->
+                    <div class="leave-card">
+                        <div class="leave-type-header">Total Leaves Taken</div>
+                        <div class="leave-details">
+                            <div class="availability">
+                                <div class="available">Paid Leaves</div>
+                                <div class="count">{totalLeavesBooked} day(s)</div>
+                            </div>
+                            <div class="booked">
+                                <div class="booked-label">Unpaid Leaves</div>
+                                <div class="count-circle">{totalAbsent}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </template>
+
+    </div>
+</template>

@@ -1,0 +1,38 @@
+<template>
+    <div class="picker-container">
+        <!-- Header Display -->
+        <div class="display-header">
+            <span class={hourDisplayClass} onclick={switchToHourView}>{formattedHour}</span>
+            <span class="colon">:</span>
+            <span class={minuteDisplayClass} onclick={switchToMinuteView}>{formattedMinute}</span>
+        </div>
+
+        <!-- Clock Face -->
+        <div class={clockFaceClass} 
+             onmousedown={handleDragStart} 
+             ontouchstart={handleDragStart}>
+            
+            <!-- Center Dot -->
+            <div class="clock-center-dot"></div>
+
+            <!-- Clock Hand -->
+            <div class={handContainerClass} style={handStyle}>
+                <div class="clock-hand"></div>
+                <div class="hand-endpoint"></div>
+            </div>
+            
+            <!-- Numbers -->
+            <template for:each={numbers} for:item="num">
+                <div key={num.value} class="number-container" style={num.style}>
+                    <div class={num.className}>{num.display}</div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+            <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button variant="brand" label="Set" onclick={handleSet}></lightning-button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Leave Dashboard" class="slds-p-around_small">
+
+        <div class="wrapper-container slds-p-around_small">
+
+            <!-- ROW container -->
+            <div class="components-row">
+
+                <!-- Left Component -->
+                <div class="component-box">
+                    <c-leave-summary-component></c-leave-summary-component>
+                </div>
+
+                <!-- Right Component -->
+                <div class="component-box">
+                    <c-leave-request-component 
+                        submit-button-control={submitButtonControl}>
+                    </c-leave-request-component>
+                </div>
+
+            </div>
+        </div>
+
+    </lightning-card>
+</template>

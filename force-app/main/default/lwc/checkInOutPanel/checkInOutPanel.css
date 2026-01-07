@@ -1,0 +1,170 @@
+/* Custom styles for the Check In/Out Panel */
+
+.slds-box {
+    border-radius: 0.5rem;
+    border: 1px solid #e5e5e5;
+}
+
+.slds-theme_shade {
+    background-color: #fafaf9;
+}
+
+.slds-badge_success {
+    background-color: #4bca81;
+    color: white;
+}
+
+.slds-text-color_success {
+    color: #4bca81 !important;
+}
+
+/* Status indicator styles */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.checked-in {
+    background-color: #4bca81;
+}
+
+.status-dot.checked-out {
+    background-color: #747474;
+}
+
+/* Button group spacing */
+.slds-button-group lightning-button {
+    margin-right: 0.5rem;
+}
+
+.slds-button-group lightning-button:last-child {
+    margin-right: 0;
+}
+
+/* Camera Modal Styles */
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.camera-preview,
+.photo-preview {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 2px solid #e5e5e5;
+    background-color: #f3f3f3;
+}
+
+.camera-preview {
+    transform: scaleX(-1); /* Mirror the video for better user experience */
+}
+
+.photo-preview {
+    transform: scaleX(-1); /* Keep the same mirroring for consistency */
+}
+
+/* Modal adjustments for mobile */
+@media (max-width: 768px) {
+    .slds-modal__container {
+        width: 95%;
+        max-width: none;
+    }
+    
+    .camera-preview,
+    .photo-preview {
+        max-width: 100%;
+        height: 250px;
+    }
+}
+
+/* Data table customization */
+lightning-datatable {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .slds-grid.slds-wrap .slds-col {
+        margin-bottom: 1rem;
+    }
+    
+    .slds-button-group {
+        width: 100%;
+    }
+    
+    .slds-button-group lightning-button {
+        flex: 1;
+    }
+}
+
+/* Loading state */
+.loading-overlay {
+    position: relative;
+}
+
+.loading-overlay lightning-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Card header customization */
+lightning-card {
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced visual hierarchy */
+.slds-text-heading_small {
+    font-weight: 600;
+    color: #3e3e3c;
+}
+
+.slds-text-body_regular {
+    line-height: 1.5;
+}
+
+/* Success state styling */
+.success-highlight {
+    border-left: 4px solid #4bca81;
+    padding-left: 1rem;
+}
+
+/* Error state styling */
+.error-highlight {
+    border-left: 4px solid #ea001e;
+    padding-left: 1rem;
+}
+
+/* Animation for status changes */
+.status-transition {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hover effects for interactive elements */
+lightning-button:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+}
+
+/* Focus states for accessibility */
+lightning-button:focus,
+lightning-combobox:focus-within {
+    outline: 2px solid #1589ee;
+    outline-offset: 2px;
+}

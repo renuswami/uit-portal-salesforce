@@ -1,0 +1,335 @@
+<template>
+    
+    <div class="application-form-container slds-card slds-p-around_large">
+        <lightning-card class="slds-size_8-of-12 slds-size_1-of-1_small">
+            <div class="card-header-center slds-m-bottom_large">
+                <h6>UntangleIT Job Application Form</h6>
+            </div>
+            
+            <div class="form-accent-wrapper slds-p-around_medium">
+
+                <form onsubmit={handleSubmit}>
+                    <template if:false={candidateId}>
+                    
+                    <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_small purple-icon-header">
+                        <lightning-icon icon-name="utility:target" size="small" class="slds-m-right_small"></lightning-icon>
+                        Position Applied For
+                    </h3>                
+                    <lightning-combobox
+                            label="Position"
+                            name="position"
+                            value={candidate.position}
+                            placeholder="Select a Position"
+                            options={positionOptions}
+                            onchange={handleInputChange}
+                            required>
+                        </lightning-combobox>
+
+                        <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_small purple-icon-header">
+                            <lightning-icon icon-name="utility:user" size="small" class="slds-m-right_small"></lightning-icon>
+                            Personal Details
+                        </h3>
+                        
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                <lightning-input 
+                                    label="First Name" name="firstName" value={candidate.firstName} 
+                                    onchange={handleInputChange} required>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                <lightning-input 
+                                    label="Last Name" name="lastName" value={candidate.lastName} 
+                                    onchange={handleInputChange} required>
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-m-top_small">
+                            <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                <lightning-input 
+                                    type="email" label="Email" name="email" value={candidate.email} 
+                                    onchange={handleInputChange} required>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                <lightning-input 
+                                    type="tel" label="Phone" name="phone" value={candidate.phone} 
+                                    onchange={handleInputChange}
+                                    onkeydown={validateNumberInput} maxlength="10">
+                                </lightning-input>
+                            </div>
+                        </div>
+                        
+                        <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_small purple-icon-header">
+                            <lightning-icon icon-name="utility:location" size="small" class="slds-m-right_small"></lightning-icon>
+                            Current Address
+                        </h3>
+                        <lightning-input-address
+                            address-label="Current Address"
+                            street-label="Street"
+                            city-label="City"
+                            province-label="State/Province"
+                            postal-code-label="Zip/Postal Code"
+                            country-label="Country"
+                            street={candidate.currentAddress.street}
+                            city={candidate.currentAddress.city}
+                            province={candidate.currentAddress.province}
+                            postal-code={candidate.currentAddress.postalCode}
+                            country={candidate.currentAddress.country}
+                            onchange={handleCurrentAddressChange}
+                            country-options={countryOptions}  
+                            province-options={currentStateOptions}
+                            required>
+                        </lightning-input-address>
+
+                        <lightning-input 
+                            type="checkbox" 
+                            label="Current Address Equals to Permanent Address?"
+                            name="CAddressEqualsPAddress"
+                            checked={candidate.CAddressEqualsPAddress}
+                            onchange={handleInputChange}  
+                            class="slds-m-top_large slds-m-bottom_small">
+                        </lightning-input>
+
+                        <template if:false={candidate.CAddressEqualsPAddress}>
+                            
+                            <h4 class="slds-text-heading_small slds-m-top_medium slds-m-bottom_small purple-icon-header">
+                                <lightning-icon icon-name="utility:location" size="small" class="slds-m-right_small"></lightning-icon>
+                                Permanent Address
+                            </h4>
+                            <lightning-combobox 
+                                label="Permanent Country" 
+                                name="country" 
+                                value={candidate.permanentAddress.country} 
+                                options={countryOptions} 
+                                placeholder="Select Country"
+                                onchange={handlePermanentAddressChange} 
+                                data-permanent-address="true"
+                                >
+                            </lightning-combobox>
+                            <lightning-input 
+                                label="Permanent Street" 
+                                name="street" 
+                                value={candidate.permanentAddress.street} 
+                                onchange={handlePermanentAddressChange} 
+                                data-permanent-address="true"
+                                >
+                            </lightning-input>
+                            <lightning-input 
+                                label="Permanent City" 
+                                name="city" 
+                                value={candidate.permanentAddress.city} 
+                                onchange={handlePermanentAddressChange} 
+                                data-permanent-address="true"
+                                >
+                            </lightning-input>
+                            
+                            <div class="slds-grid slds-wrap slds-m-top_small">
+                                <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                    <lightning-input 
+                                        label="Permanent Postal Code" 
+                                        name="postalCode" 
+                                        value={candidate.permanentAddress.postalCode} 
+                                        onchange={handlePermanentAddressChange} 
+                                        data-permanent-address="true"
+                                        >
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                    <lightning-combobox 
+                                        label="Permanent State/Province" 
+                                        name="province" 
+                                        value={candidate.permanentAddress.province} 
+                                        options={permanentStateOptions} 
+                                        placeholder="Select State"
+                                        onchange={handlePermanentAddressChange} 
+                                        data-permanent-address="true"
+                                        >
+                                    </lightning-combobox>
+                                </div>
+                                
+                            </div>
+                        </template>
+                        
+
+                        <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_small purple-icon-header">
+                            <lightning-icon icon-name="utility:education" size="small" class="slds-m-right_small"></lightning-icon>
+                            Education Details
+                        </h3>
+                        
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                <lightning-input 
+                                    label="Highest Degree" name="highestDegree" 
+                                    value={candidate.highestDegree} onchange={handleInputChange} required>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                <lightning-input 
+                                    label="University Name" name="universityName" 
+                                    value={candidate.universityName} onchange={handleInputChange} required>
+                                </lightning-input>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-m-top_small">
+                            <lightning-input 
+                                type="text" label="Graduation Year" name="graduationYear" 
+                                value={candidate.graduationYear} onchange={handleInputChange}
+                                onkeydown={validateYearInput} maxlength="4" 
+                                min="1950" max="2050" required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="slds-m-bottom_large"></div>
+                        <lightning-input
+                            type="checkbox"
+                            label="I have prior professional experience"
+                            name="hasPriorExperience"
+                            checked={candidate.hasPriorExperience}
+                            onchange={handleInputChange}
+                            class="slds-m-bottom_medium">
+                        </lightning-input>
+
+                        <template if:true={candidate.hasPriorExperience}>
+                            <div class="slds-m-bottom_large"> 
+                                <h4 class="slds-text-heading_small slds-m-bottom_medium purple-icon-header">
+                                    <lightning-icon icon-name="utility:builder" size="small" class="slds-m-right_small"></lightning-icon>
+                                    Prior Experience Information</h4>
+                                
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                        <label class="slds-form-element__label">Previous Experience</label>
+                                        
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning-input 
+                                                    type="number" 
+                                                    label="Years" 
+                                                    name="expYears" 
+                                                    value={expYears}
+                                                    placeholder="Enter Years" 
+                                                    onchange={handleInputChange}
+                                                    onkeydown={validateYearInput}
+                                                    min="0"
+                                                    max="50"
+                                                    maxlength="2">
+                                                </lightning-input>
+                                            </div>
+                                            
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning-combobox
+                                                    label="Months"
+                                                    name="expMonths"
+                                                    value={expMonths}
+                                                    placeholder="Select Months"
+                                                    options={monthOptions}
+                                                    onchange={handleInputChange}>
+                                                </lightning-combobox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                        <lightning-input label="Last Company" name="lastCompany" 
+                                        value={candidate.lastCompany} onchange={handleInputChange} 
+                                        ></lightning-input>
+                                    </div>
+                                </div>
+
+                                <div class="slds-grid slds-wrap slds-m-top_small">
+                                    <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                        <lightning-input label="Job Profile" name="jobProfile" 
+                                        value={candidate.jobProfile} onchange={handleInputChange} 
+                                        ></lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                        <lightning-input type="number" 
+                                        label="Current CTC (in Lakhs/Annum)" name="currentCTC" 
+                                        value={candidate.currentCTC} onchange={handleInputChange}
+                                        onkeydown={validateNumberInput}>
+                                        </lightning-input>
+                                    </div>
+                                </div>
+
+                                <div class="slds-grid slds-wrap slds-m-top_small">
+                                    <div class="slds-col slds-size_1-of-2 slds-p-right_small">
+                                        <lightning-input type="number" 
+                                            label="Expected CTC (in Lakhs/Annum)" name="expectedCTC" 
+                                            value={candidate.expectedCTC} onchange={handleInputChange}
+                                            onkeydown={validateNumberInput}>
+                                        </lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-p-left_small">
+                                        <lightning-input label="Notice Period (Days/Months)"
+                                         name="noticePeriod" value={candidate.noticePeriod} 
+                                         onchange={handleInputChange} ></lightning-input>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="file-input">
+                                        Upload PaySlip
+                                        </label>
+                                    <div class="slds-form-element__control">
+                                        <input 
+                                            type="file" 
+                                            id="file-input-1" 
+                                            name="PaySlipFile"
+                                            accept=".pdf, .doc, .docx" 
+                                            onchange={handleFileChange} 
+                                            required 
+                                            class="slds-input_file">
+                                        <div class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                                            Selected File: **{fileName}**
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_small slds-p-top_large purple-icon-header">
+                            <lightning-icon icon-name="utility:upload" size="small" class="slds-m-right_small"></lightning-icon>
+                            Resume/CV Upload
+                        </h3>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="file-input">
+                                Upload Resume/CV
+                                </label>
+                            <div class="slds-form-element__control">
+                                <input 
+                                    type="file" 
+                                    id="file-input" 
+                                    name="resumeFile"
+                                    accept=".pdf, .doc, .docx" 
+                                    onchange={handleFileChange} 
+                                    required 
+                                    class="slds-input_file">
+                                <div class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                                    Selected File: **{fileName}**
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-m-top_large slds-align_absolute-center">
+                            <lightning-button 
+                                variant="brand" 
+                                label={submitButtonLabel} 
+                                onclick={handleSubmit} 
+                                disabled={isSubmitting}
+                                class="slds-m-left_x-small purple-submit-button"
+                                type="submit">
+                            </lightning-button>
+                        </div>
+                    </template>
+                    
+                    <template if:true={candidateId}>
+                        <p class="slds-text-heading_small slds-m-bottom_small slds-text-color_success">
+                            Application submitted successfully!
+                        </p>
+                        
+                    </template>
+                </form>
+
+            </div> </lightning-card>
+    </div>
+</template>

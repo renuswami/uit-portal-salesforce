@@ -1,0 +1,51 @@
+<template>
+    <div class="holiday-summary-container">
+
+        <!-- Loading -->
+        <template if:true={loading}>
+            <div class="loading-spinner">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                Loading upcoming holidays...
+            </div>
+        </template>
+
+        <!-- Error -->
+        <template if:true={error}>
+            <div class="error-message">
+                <div class="error-icon">⚠️</div>
+                <div class="error-text">
+                    <strong>Unable to load holiday data</strong>
+                    <div class="error-details">{errorMessage}</div>
+                    <button class="retry-button" onclick={handleRetry}>Try Again</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Main Content -->
+        <template if:true={showMainContent}>
+
+            <!-- ⭐ WRAPPED IN A BOX LIKE LEAVE SUMMARY ⭐ -->
+            <div class="holiday-box">
+
+                <h3 class="section-title">Upcoming Holidays</h3>
+
+                <div class="events-list">
+
+                    <template for:each={upcomingHolidays} for:item="event">
+                        <div key={event.id} class="event-item">
+                            <div class="event-date">{event.date}</div>
+                            <div class="event-name">{event.name}</div>
+                            <div class="event-type">{event.type}</div>
+                        </div>
+                    </template>
+
+                    <template if:true={hasNoUpcomingHolidays}>
+                        <div class="no-events">No upcoming holidays found</div>
+                    </template>
+
+                </div>
+            </div>
+
+        </template>
+    </div>
+</template>

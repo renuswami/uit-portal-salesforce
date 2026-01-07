@@ -1,0 +1,22 @@
+.compact-upload {
+    padding: 0;
+}
+
+.compact-upload .slds-file-selector {
+    padding: 0;
+}
+
+.compact-upload .slds-file-selector__dropzone {
+    border: none;
+    padding: 0;
+    justify-content: flex-start;
+}
+
+.compact-upload .slds-text-heading_medium {
+    display: none;
+}
+
+/* Ensure the action menu doesn't get squashed */
+.slds-shrink-none {
+    flex-shrink: 0;
+}

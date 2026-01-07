@@ -1,0 +1,11 @@
+.components-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;          /* spacing between components */
+    align-items: flex-start;
+}
+
+.component-box {
+    flex: 1;            /* both components take equal width */
+    min-width: 45%;     /* prevents shrinking too much */
+}

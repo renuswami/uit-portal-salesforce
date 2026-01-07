@@ -1,0 +1,149 @@
+:host {
+    font-family: Arial, sans-serif;
+}
+
+.picker-container {
+    width: 321px;
+    background-color: white;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; /* <-- ADD THIS LINE */
+}
+
+.display-header {
+    background-color: #0070D2; /* Salesforce Blue */
+    color: white;
+    font-size: 3.5rem;
+    font-weight: 300;
+    padding: 20px;
+    text-align: center;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.display-value {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.display-value.active {
+    opacity: 1;
+    font-weight: 400;
+}
+
+.colon {
+    margin: 0 5px;
+}
+
+.clock-face {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 20px auto;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.clock-face.is-dragging .clock-hand-container {
+    transition: none;
+}
+
+.clock-center-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background-color: #0070D2; /* Salesforce Blue */
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+}
+
+.clock-hand-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clock-hand {
+    position: absolute;
+    bottom: 50%; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background-color: #0070D2; /* Salesforce Blue */
+    height: 110px; 
+    transition: height 0.25s ease;
+}
+
+.hand-endpoint {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #0070D2; /* Salesforce Blue */
+    top: 20px;
+    transition: top 0.25s ease;
+}
+
+.clock-hand-container.short-hand .clock-hand {
+    height: 75px;
+}
+.clock-hand-container.short-hand .hand-endpoint {
+    top: 55px;
+}
+
+.number-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+}
+
+.number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    pointer-events: none;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.number.is-inner {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.number.selected {
+    background-color: #0070D2; /* Salesforce Blue */
+    color: white;
+    font-weight: bold;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 16px;
+}
+
+lightning-button {
+    margin-left: 8px;
+}

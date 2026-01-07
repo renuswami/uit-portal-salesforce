@@ -1,0 +1,41 @@
+<template>
+
+    <lightning-card>
+        <div class="wrapper">
+            <template for:each={records} for:item="day">
+                <div key={day.date} class="row">
+                    <div class="day-col">
+                        <div class="day">{day.day}</div>
+                        <div class="date">{day.date}</div>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="line"></div>
+
+                        <template if:true={day.isAbsent}>
+                            <div class="status-tag absent">Absent</div>
+                        </template>
+
+                        <template if:true={day.isWeekend}>
+                            <div class="status-tag weekend">Weekend</div>
+                        </template>
+
+                        <template if:true={day.isHalfDay}>
+                            <div class="status-tag halfday">0.5 Day Present, 0.5 Day Absent</div>
+                        </template>
+
+                        <template if:false={day.isAbsent}>
+                            <div class="dot start"></div>
+                            <div class="dot end"></div>
+                        </template>
+                    </div>
+
+                    <div class="hours">
+                        <div class="time">{day.hours}</div>
+                        <div class="text">Hrs worked</div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

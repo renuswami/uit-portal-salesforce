@@ -1,0 +1,86 @@
+<template>
+  <div class="slds-p-around_medium slds-grid slds-grid_vertical slds-grid_align-start slds-grid_vertical-stretch slds-wrap">
+    <div class="slds-m-bottom_medium">
+      <h1 class="slds-text-heading_large">Employee Profile</h1>
+      <p class="slds-text-color_weak slds-m-top_x-small">View and manage your personal information</p>
+    </div>
+
+    <lightning-card title="" icon-name="standard:user" class="slds-m-bottom_medium">
+      <div class="slds-p-around_medium slds-grid slds-wrap slds-gutters">
+        <div class="slds-m-right_medium">
+          <lightning-avatar initials={initials} size="large" variant="circle" alternative-text="Employee Avatar"></lightning-avatar>
+        </div>
+        <div class="slds-grid slds-grid_vertical slds-col slds-size_1-of1 slds-medium-size_3-of4">
+          <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+            <div>
+              <h2 class="slds-text-heading_medium slds-m-bottom_x-small">{employeeData.name}</h2>
+              <p class="slds-text-color_weak">{employeeData.designation}</p>
+              <div class="slds-grid slds-wrap slds-m-top_small slds-grid_vertical-align-center slds-gutters_small">
+                <span class="slds-badge slds-m-right_x-small">{employeeData.employmentType}</span>
+                <span class="slds-badge slds-badge_lightest">ID: {employeeData.id}</span>
+              </div>
+            </div>
+          </div>
+          <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium">
+            <div class="slds-size_1-of1 slds-medium-size_1-of2 slds-grid slds-grid_align-start slds-m-bottom_small slds-grid_vertical-align-center">
+              <lightning-icon icon-name="utility:email" size="x-small" class="slds-m-right_small" alternative-text="Email"></lightning-icon>
+              <span class="slds-text-body_small">{employeeData.email}</span>
+            </div>
+            <div class="slds-size_1-of1 slds-medium-size_1-of2 slds-grid slds-grid_align-start slds-m-bottom_small slds-grid_vertical-align-center">
+              <lightning-icon icon-name="utility:call" size="x-small" class="slds-m-right_small" alternative-text="Phone"></lightning-icon>
+              <span class="slds-text-body_small">{employeeData.phone}</span>
+            </div>
+            <div class="slds-size_1-of1 slds-medium-size_1-of2 slds-grid slds-grid_align-start slds-m-bottom_small slds-grid_vertical-align-center">
+              <lightning-icon icon-name="utility:location" size="x-small" class="slds-m-right_small" alternative-text="Address"></lightning-icon>
+              <span class="slds-text-body_small">{employeeData.address}</span>
+            </div>
+            <div class="slds-size_1-of1 slds-medium-size_1-of2 slds-grid slds-grid_align-start slds-m-bottom_small slds-grid_vertical-align-center">
+              <lightning-icon icon-name="utility:event" size="x-small" class="slds-m-right_small" alternative-text="Joining Date"></lightning-icon>
+              <span class="slds-text-body_small">Joined: {employeeData.joiningDate}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </lightning-card>
+
+    <div class="slds-grid slds-wrap slds-gutters">
+      <div class="slds-size_1-of1 slds-medium-size_1-of2">
+        <lightning-card title="Work Information" icon-name="utility:briefcase" class="slds-m-bottom_medium">
+          <div class="slds-p-around_medium slds-grid slds-grid_vertical slds-gutters_small">
+            <div>
+              <label class="slds-text-body_small slds-text-color_weak">Department</label>
+              <p class="slds-text-body_regular slds-m-top_x-small">{employeeData.department}</p>
+            </div>
+            <div>
+              <label class="slds-text-body_small slds-text-color_weak">Designation</label>
+              <p class="slds-text-body_regular slds-m-top_x-small">{employeeData.designation}</p>
+            </div>
+            <div>
+              <label class="slds-text-body_small slds-text-color_weak">Total Tenure</label>
+              <p class="slds-text-body_regular slds-m-top_x-small">{tenureString}</p>
+            </div>
+            <div>
+              <label class="slds-text-body_small slds-text-color_weak">Employment Type</label>
+              <p class="slds-text-body_regular slds-m-top_x-small">{employeeData.employmentType}</p>
+            </div>
+          </div>
+        </lightning-card>
+      </div>
+
+      <div class="slds-size_1-of1 slds-medium-size_1-of2">
+        <lightning-card title="Manager Information" icon-name="utility:user" class="slds-m-bottom_medium">
+          <div class="slds-p-around_medium slds-grid slds-grid_vertical slds-gutters_small">
+            <div>
+              <label class="slds-text-body_small slds-text-color_weak">Manager Name</label>
+              <p class="slds-text-body_regular slds-m-top_x-small">{employeeData.manager}</p>
+            </div>
+            <div>
+              <label class="slds-text-body_small slds-text-color_weak">Title</label>
+              <p class="slds-text-body_regular slds-m-top_x-small">{employeeData.managerTitle}</p>
+            </div>
+          </div>
+        </lightning-card>
+      </div>
+    </div>
+  </div>
+</template>

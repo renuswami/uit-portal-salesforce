@@ -1,0 +1,238 @@
+<template>
+    <lightning-card title="Log Your Time" icon-name="standard:timesheet">
+        <div class="slds-p-around_medium">
+            <!-- Header Section -->
+            <!-- <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-1">
+                    <div class="header-banner slds-p-around_medium slds-text-align_center">
+                        <lightning-icon icon-name="utility:clock" size="medium" class="slds-m-right_small"></lightning-icon>
+                        <h2 class="slds-text-heading_medium slds-text-color_inverse">Track your project hours efficiently</h2>
+                        <p class="slds-text-body_regular slds-text-color_inverse slds-m-top_x-small">
+                            Select a project, choose your task, and log your time with ease
+                        </p>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Time Logging Form -->
+            <lightning-layout multiple-rows="true" vertical-align="start">
+                <!-- Project Selection -->
+                <lightning-layout-item size="12" medium-device-size="6" large-device-size="6" class="slds-p-around_small">
+                    <div class="form-section">
+                        <lightning-combobox
+                            name="project"
+                            label="Select Project"
+                            value={selectedProjectId}
+                            placeholder="Choose a project..."
+                            options={projectOptions}
+                            onchange={handleProjectChange}
+                            variant="label-stacked"
+                            class="project-selector"
+                            required>
+                        </lightning-combobox>
+                        <!-- <div if:true={selectedProject} class="project-info slds-m-top_small">
+                            <div class="slds-box slds-box_x-small slds-theme_shade">
+                                <lightning-icon icon-name="standard:work_order" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                <span class="slds-text-body_small">{selectedProject.Description__c}</span>
+                            </div>
+                        </div> -->
+                    </div>
+                </lightning-layout-item>
+
+                <!-- Task Selection -->
+                <lightning-layout-item size="12" medium-device-size="6" large-device-size="6" class="slds-p-around_small">
+                    <div class="form-section">
+                        <lightning-input
+                            type="search"
+                            label="Search & Select Task"
+                            placeholder="Type to search tasks..."
+                            value={taskSearchTerm}
+                            onchange={handleTaskSearch}
+                            variant="label-stacked"
+                            class="task-search"
+                            disabled={isProjectNotSelected}>
+                        </lightning-input>
+                        
+                        <!-- Task Dropdown -->
+                        <div if:true={showTaskDropdown} class="task-dropdown slds-dropdown slds-dropdown_fluid">
+                            <ul class="slds-dropdown__list" role="listbox">
+                                <template for:each={filteredTasks} for:item="task">
+                                    <li key={task.Id} class="slds-dropdown__item" role="option" onclick={handleTaskSelect} data-task-id={task.Id}>
+                                        <span class="slds-truncate">
+                                            <lightning-icon icon-name="standard:task" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                            {task.Name}
+                                            <span class="slds-text-color_weak"> - {task.Priority__c}</span>
+                                        </span>
+                                    </li>
+                                </template>
+                                <li if:true={noTasksFound} class="slds-dropdown__item slds-text-color_weak">
+                                    <span class="slds-truncate">No tasks found</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Selected Task Display -->
+                        <!-- <div if:true={selectedTask} class="selected-task slds-m-top_small">
+                            <div class="slds-box slds-box_x-small slds-theme_success">
+                                <lightning-icon icon-name="utility:check" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                <strong>{selectedTask.Name}</strong>
+                                <div class="slds-text-body_small slds-m-top_x-small">
+                                    Priority: {selectedTask.Priority__c} | Due: {formattedDueDate}
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </lightning-layout-item>
+
+                <!-- Time Entry Section -->
+                <lightning-layout-item size="12" class="slds-p-around_small">
+                    <div class="time-entry-section">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                            <lightning-icon icon-name="utility:clock" size="small" class="slds-m-right_x-small"></lightning-icon>
+                            Time Entry Details
+                        </h3>
+                        
+                        <lightning-layout multiple-rows="true">
+                            <!-- Date and Hours Row -->
+                            <lightning-layout-item size="12" medium-device-size="6" large-device-size="6" class="slds-p-around_x-small">
+                                <lightning-input
+                                    type="date"
+                                    label="Date"
+                                    value={logDate}
+                                    onchange={handleDateChange}
+                                    variant="label-stacked"
+                                    required>
+                                </lightning-input>
+                            </lightning-layout-item>
+                            
+                            <lightning-layout-item size="12" medium-device-size="6" large-device-size="6" class="slds-p-around_x-small">
+                                <lightning-input
+                                    type="number"
+                                    label="Hours"
+                                    value={hours}
+                                    onchange={handleHoursChange}
+                                    variant="label-stacked"
+                                    step="0.25"
+                                    min="0.25"
+                                    max="24"
+                                    placeholder="e.g., 2.5"
+                                    >
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <!-- Quick Hour Buttons Row -->
+                            <lightning-layout-item size="12" class="slds-p-around_x-small">
+                                <label class="slds-form-element__label">Quick Select</label>
+                                <div class="quick-hours slds-m-top_x-small">
+                                    <lightning-button-group>
+                                        <lightning-button label="1h" onclick={handleQuickHour} data-hours="1" variant="neutral" size="small"></lightning-button>
+                                        <lightning-button label="2h" onclick={handleQuickHour} data-hours="2" variant="neutral" size="small"></lightning-button>
+                                        <lightning-button label="4h" onclick={handleQuickHour} data-hours="4" variant="neutral" size="small"></lightning-button>
+                                        <lightning-button label="8h" onclick={handleQuickHour} data-hours="8" variant="neutral" size="small"></lightning-button>
+                                    </lightning-button-group>
+                                </div>
+                            </lightning-layout-item>
+
+                            <!-- Description -->
+                            <lightning-layout-item size="12" class="slds-p-around_x-small">
+                                <lightning-textarea
+                                    label="Description"
+                                    value={description}
+                                    onchange={handleDescriptionChange}
+                                    placeholder="Describe what you worked on..."
+                                    variant="label-stacked"
+                                    rows="3" 
+                                    required>
+                                </lightning-textarea>
+                            </lightning-layout-item>
+
+                            <!-- Billable Checkbox -->
+                            <lightning-layout-item size="12" class="slds-p-around_x-small">
+                                <lightning-input
+                                    type="checkbox"
+                                    label="Billable?"
+                                    checked={billable}
+                                    onchange={handleBillableChange}
+                                    variant="label-inline">
+                                </lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </lightning-layout-item>
+
+                <!-- Action Buttons -->
+                <lightning-layout-item size="12" class="slds-p-around_small">
+                    <div class="slds-text-align_center">
+                        <lightning-button
+                            label="Log Time"
+                            onclick={handleSubmit}
+                            variant="brand"
+                            class="slds-m-right_small"
+                            disabled={isFormInvalid}>
+                        </lightning-button>
+                        <lightning-button
+                            label="Clear Form"
+                            onclick={handleClear}
+                            variant="neutral">
+                        </lightning-button>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <!-- Recent Time Logs Section -->
+            <!-- <div if:true={showRecentLogs} class="recent-logs-section slds-m-top_large">
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme_shade">
+                        <button class="slds-button slds-section__title-action" onclick={toggleRecentLogs}>
+                            <lightning-icon icon-name="utility:chevrondown" size="x-small" class="slds-section__title-action-icon"></lightning-icon>
+                            <span class="slds-truncate">Recent Time Logs ({recentTimeLogs.length})</span>
+                        </button>
+                    </h3>
+                    <div class="slds-section__content">
+                        <div class="slds-scrollable_y" style="height: 200px;">
+                            <template for:each={recentTimeLogs} for:item="log">
+                                <div key={log.id} class="log-item slds-box slds-box_x-small slds-m-bottom_x-small">
+                                    <div class="slds-grid slds-grid_align-spread">
+                                        <div class="slds-col">
+                                            <div class="slds-text-body_small">
+                                                <strong>{log.taskName}</strong> - {log.projectName}
+                                            </div>
+                                            <div class="slds-text-body_small slds-text-color_weak">
+                                                {log.description}
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-no-flex slds-text-align_right">
+                                            <div class="slds-text-body_small">
+                                                <strong>{log.hours}h</strong>
+                                            </div>
+                                            <div class="slds-text-body_small slds-text-color_weak">
+                                                {log.formattedDate}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- Success/Error Messages -->
+        <!-- <template if:true={showSuccessMessage}>
+            <div class="slds-notify slds-notify_alert slds-theme_success slds-m-around_medium">
+                <span class="slds-assistive-text">Success</span>
+                <lightning-icon icon-name="utility:success" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                {successMessage}
+            </div>
+        </template> -->
+
+        <template if:true={showErrorMessage}>
+            <div class="slds-notify slds-notify_alert slds-theme_error slds-m-around_medium">
+                <span class="slds-assistive-text">Error</span>
+                <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                {errorMessage}
+            </div>
+        </template>
+    </lightning-card>
+</template>

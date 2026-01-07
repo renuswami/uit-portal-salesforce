@@ -1,0 +1,26 @@
+<template>
+    <lightning-card title="Test Apex Call">
+        <div class="slds-p-around_medium">
+            <lightning-button label="Get Counts" onclick={handleClick}></lightning-button>
+            
+            <template if:true={loading}>
+                <p>Loading...</p>
+            </template>
+
+            <template if:true={error}>
+                <p>Error: {error.body.message}</p>
+            </template>
+
+            <template if:false={loading}>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <p>Total Applied: {counts.totalApplied}</p>
+                        <p>Approved: {counts.approved}</p>
+                        <p>Pending: {counts.pending}</p>
+                        <p>Rejected: {counts.rejected}</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

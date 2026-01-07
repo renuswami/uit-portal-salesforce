@@ -1,0 +1,163 @@
+.leave-summary-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #fafafa;
+    border-radius: 4px;
+    border-left: 4px solid #ff9e2c;
+}
+
+.error-icon {
+    font-size: 24px;
+    margin-right: 12px;
+}
+
+.error-text {
+    flex: 1;
+}
+
+.error-details {
+    margin: 8px 0;
+    color: #706e6b;
+}
+
+.retry-button {
+    background: #0070d2;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.leave-stats {
+    font-size: 14px;
+}
+
+.separator {
+    margin: 0 8px;
+    color: #dddbda;
+}
+
+
+
+.leave-type-header {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #2b2826;
+}
+
+.leave-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.availability .available,
+.booked .booked-label {
+    font-size: 12px;
+    color: #5fd332;
+    margin-bottom: 4px;
+}
+
+.count {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2b2826;
+}
+
+.count-circle {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2b2826;
+}
+
+.upcoming-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #dddbda;
+}
+
+.upcoming-section h3 {
+    margin-bottom: 1rem;
+    color: #2b2826;
+}
+
+.event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f2f2;
+}
+
+.event-item:last-child {
+    border-bottom: none;
+}
+
+.event-date {
+    font-weight: bold;
+    color: #2b2826;
+    min-width: 180px;
+}
+
+.event-name {
+    flex: 1;
+    color: #2b2826;
+}
+
+.event-type {
+    background: #f3f2f2;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #706e6b;
+}
+
+.no-events {
+    text-align: center;
+    color: #706e6b;
+    font-style: italic;
+    padding: 2rem;
+}
+
+.leave-box {
+    border: 1px solid #d8dde6;
+    border-radius: 10px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.leave-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* spacing between cards */
+}
+
+/* Optional: each card already has style, but you can enhance */
+.leave-card {
+    border: 1px solid #e6e6e6;
+    padding: 15px;
+    border-radius: 8px;
+    background: #fafafa;
+}
