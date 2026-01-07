@@ -1,0 +1,84 @@
+<template>
+    <div class="calendar-card slds-card">
+        <!-- Header -->
+        <div class="slds-p-around_medium header-container">
+            <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                <!-- Navigation & Title -->
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <div class="slds-button-group slds-m-right_medium">
+                        <lightning-button-icon icon-name="utility:chevronleft" variant="border-filled" onclick={handlePreviousMonth} alternative-text="Previous Month"></lightning-button-icon>
+                        <div class="slds-button slds-button_icon slds-button_icon-border-filled calendar-icon-btn">
+                            <lightning-icon icon-name="standard:event" size="small"></lightning-icon>
+                        </div>
+                        <lightning-button-icon icon-name="utility:chevronright" variant="border-filled" onclick={handleNextMonth} alternative-text="Next Month"></lightning-button-icon>
+                    </div>
+                    <h2 class="slds-text-heading_medium slds-font-weight_bold">
+                        {currentMonthName} {currentYear}
+                    </h2>
+                </div>
+
+                <!-- Action Buttons -->
+               <div>
+                    <lightning-button label="Regularization" variant="brand" onclick={openRegularizationModal} class="slds-m-left_small"></lightning-button>
+                </div> 
+            </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-grid-container slds-is-relative">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Weekday Headers -->
+            <div class="weekdays-grid">
+                <template for:each={weekdays} for:item="day">
+                    <div key={day} class="weekday-header slds-text-color_weak">
+                        {day}
+                    </div>
+                </template>
+            </div>
+
+            <!-- Days Grid -->
+            <div class="days-grid">
+                <template for:each={calendarDays} for:item="day">
+                    <div key={day.key} 
+                         class={day.cssClass}
+                         data-date={day.dateStr}>
+                        
+                        <!-- Date Number -->
+                        <div class="day-number">
+                            {day.dayNumber}
+                        </div>
+
+                        <!-- Status Badge (Only for actual days) -->
+                        <template if:true={day.hasData}>
+                            <div class={day.badgeClass}>
+                                <div class="status-text">{day.status}</div>
+                                <template if:true={day.showHours}>
+                                    <div class="hours-text">{day.workHours}</div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+    <template if:true={showRegularization}>
+        <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Regularization Request</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <c-regularize-request-component></c-regularize-request-component>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Close" onclick={closeRegularizationModal}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" onclick={closeRegularizationModal}></div>
+    </template>
+</template>

@@ -1,0 +1,172 @@
+:host {
+    display: block;
+    background-color: white;
+    --cell-min-height: 120px;
+    --border-color: #dddbda;
+}
+
+.calendar-card {
+    background: #fff;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.calendar-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    background-color: white;
+}
+
+/* Grid Layout */
+.calendar-grid-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.weekdays-grid, .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+/* Weekday Headers */
+.weekday-header {
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    background-color: #f3f2f2;
+}
+.weekday-header:last-child {
+    border-right: none;
+}
+
+/* Day Cells */
+.day-cell {
+    min-height: var(--cell-min-height);
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    padding: 0.5rem;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.1s;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Remove right border for last column */
+.days-grid .day-cell:nth-child(7n) {
+    border-right: none;
+}
+
+.day-cell:hover {
+    background-color: #f8f8f8;
+}
+
+.day-number {
+    font-weight: 400;
+    color: #181818;
+    margin-bottom: 0.25rem;
+}
+
+/* Special Cell States */
+.day-cell.disabled {
+    background-color: #f9f9fa; /* Lighter grey for empty days */
+    color: #c9c7c5;
+    pointer-events: none;
+}
+
+.day-cell.today {
+    box-shadow: inset 0 0 0 2px #0176d3;
+}
+
+.day-cell.sunday {
+    background-color: #fffbeb; /* Light yellow */
+}
+
+/* Status Badges */
+.attendance-badge {
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-top: auto; /* Push to bottom if we want, or just flow */
+    margin-bottom: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    font-size: 0.75rem;
+    line-height: 1.25;
+}
+
+.status-text {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.hours-text {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+/* Status Colors */
+.status-present {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+.status-absent {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+.status-half-day {
+    background-color: #fff3cd;
+    color: #664d03;
+    border: 1px solid #ffecb5;
+}
+
+.status-leave {
+    background-color: #cfe2ff; /* Blueish */
+    color: #084298;
+    border: 1px solid #b6d4fe;
+}
+
+.status-leave-gradient {
+    background: linear-gradient(135deg,#4c8df6 0%, #a8c7fa 100%);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 2px 4px rgba(76, 141, 246, 0.3);
+}
+
+.status-holiday {
+    background: linear-gradient(135deg,#fb6b33 0%, #fa67da 100%);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 2px 4px rgba(76, 141, 246, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    :host {
+        --cell-min-height: 80px;
+    }
+    .weekday-header {
+        padding: 0.25rem;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+    .day-cell {
+        padding: 0.25rem;
+    }
+    .status-text {
+        font-size: 0.65rem;
+    }
+    .hours-text {
+        display: none; /* Hide hours on mobile if too small */
+    }
+}

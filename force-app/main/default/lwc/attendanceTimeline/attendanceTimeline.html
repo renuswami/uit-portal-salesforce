@@ -1,0 +1,116 @@
+<template>
+    <lightning-card title="Attendance Summary" icon-name="standard:event">
+        <div class="slds-p-horizontal_medium slds-p-vertical_small debug-container">
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-box slds-theme_error slds-m-around_medium">
+                    <p>Error loading data: {errorMessage}</p>
+                </div>
+            </template>
+
+            <div class="header slds-grid slds-wrap slds-m-bottom_small">
+                <div class="slds-col slds-size_6-of-12 slds-align-middle">
+                    <div class="range-label">
+                        {weekRangeLabel}
+                    </div>
+                </div>
+                <div class="slds-col slds-size_6-of-12 slds-text-align_right">
+                    <lightning-button-group>
+                        <lightning-button-icon icon-name="utility:chevronleft" variant="border" alternative-text="Previous week" onclick={handlePrevWeek}></lightning-button-icon>
+                        <lightning-button variant="neutral" label="Today" onclick={handleToday}></lightning-button>
+                        <lightning-button-icon icon-name="utility:chevronright" variant="border" alternative-text="Next week" onclick={handleNextWeek}></lightning-button-icon>
+                    </lightning-button-group>
+                </div>
+            </div>
+
+            <div class="legend slds-m-bottom_small">
+                <span class="legend-item"><span class="legend-dot present"></span> Present</span>
+                <span class="legend-item"><span class="legend-dot partial"></span> Partial</span>
+                <span class="legend-item"><span class="legend-dot absent"></span> Absent</span>
+                <span class="legend-item"><span class="legend-dot weekend"></span> Weekend</span>
+                <span class="legend-item"><span class="legend-dot holiday"></span> Holiday</span>
+            </div>
+
+            <div class="timeline-container">
+
+                <div class="slds-grid slds-gutters_small slds-m-bottom_x-small" if:false={noData}>
+                    <div class="slds-col slds-size_2-of-12">
+                        </div>
+                    <div class="ruler-bar slds-col slds-size_8-of-12">
+                        <div class="ruler-wrapper">
+                            <span class="ruler-label" style="left: 0%;">9AM</span>
+                            <span class="ruler-label" style="left: 13.33%;">11AM</span>
+                            <span class="ruler-label" style="left: 26.66%;">1PM</span>
+                            <span class="ruler-label" style="left: 40%;">3PM</span>
+                            <span class="ruler-label" style="left: 53.33%;">5PM</span>
+                            <span class="ruler-label" style="left: 66.66%;">7PM</span>
+                            <span class="ruler-label" style="left: 80%;">9PM</span>
+                            <span class="ruler-label" style="left: 93.33%;">11PM</span>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        </div>
+                </div>
+
+                <template for:each={dailyData} for:item="day">
+                    <div key={day.attendanceId} class="day-row slds-grid slds-gutters_small">
+
+                        <div class="day-label-col slds-col slds-size_2-of-12">
+                            <div class="day-line">
+                                <span class="day-name">{day.dayOfWeek}</span>
+                                <span class="day-date">{day.dayLabel}</span>
+                            </div>
+                            <div class={day.statusClass}>{day.status}</div>
+                        </div>
+
+                        <div class="timeline-bar-col slds-col slds-size_8-of-12">
+                            <div class="timeline-background">
+                                <template for:each={day.sessions} for:item="session">
+                                    <div key={session.Id}
+                                         class={session.colorClass}
+                                         style={session.barStyle}
+                                         title={session.tooltip}>
+                                    </div>
+                                </template>
+
+                                <template if:false={day.hasSessions}>
+                                    <span class="no-session-text">{day.status}</span>
+                                </template>
+                            </div>
+                            </div>
+
+                        <div class="total-hours-col slds-col slds-size_2-of-12 slds-text-align_right">
+                            <span class="total-hours">{day.totalHours}</span>
+                            <span class="total-sub">Hrs worked</span>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={noData}>
+                    <div class="slds-box slds-m-around_medium slds-text-align_center">
+                        <p>No attendance data found for this period.</p>
+                    </div>
+                </template>
+
+                <div class="weekly-summary slds-grid slds-m-top_small slds-p-top_small">
+                    <div class="slds-col slds-size_8-of-12">
+                        <span class="summary-label">Weekly Total:</span>
+                        <span class="summary-value">{weeklyTotalHours}</span>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12 slds-text-align_right">
+                        <span class="summary-label">Present:</span>
+                        <span class="summary-value">{presentDays}</span>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12 slds-text-align_right">
+                        <span class="summary-label">Absent:</span>
+                        <span class="summary-value">{absentDays}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>
